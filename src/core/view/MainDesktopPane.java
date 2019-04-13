@@ -6,23 +6,27 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
+import core.controller.MainControllerInterface;
+
 @SuppressWarnings("serial")
 public class MainDesktopPane extends JDesktopPane {
 
+	private MainControllerInterface mainController;
 	private JInternalFrame mainMenuFrame;
 	
-	public MainDesktopPane() {
-		this.init();
+	public MainDesktopPane(MainControllerInterface mainController) {
+		this.init(mainController);
 	}
 
-	private void init() {
+	private void init(MainControllerInterface mainController) {
+		this.mainController = mainController;
 		this.initComponents();
 		this.addComponents();
 		this.openStartFrame();
 	}
 
 	private void initComponents() {
-		this.mainMenuFrame = new MainMenuFrame();
+		this.mainMenuFrame = new MainMenuFrame(this.mainController);
 	}
 	
 	private void addComponents() {

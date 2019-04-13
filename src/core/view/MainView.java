@@ -2,6 +2,8 @@ package core.view;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 
 import core.controller.MainController;
 import core.controller.MainControllerInterface;
@@ -11,6 +13,7 @@ import core.controller.MainControllerObserver;
 public class MainView extends JFrame implements MainControllerObserver {
 
 	private MainControllerInterface mainController;
+	private JMenuBar menuBar;
 	private JDesktopPane desktopPane;
 
 	public MainView() {
@@ -24,11 +27,12 @@ public class MainView extends JFrame implements MainControllerObserver {
 	}
 
 	private void defineProperties() {
-		this.setTitle("Main View");
+		this.defineController();
+		this.setTitle(this.mainController.getSystemTitle());
 		this.setSize(800, 600);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
-		this.defineController();
 	}
 
 	private void defineController() {
@@ -37,11 +41,28 @@ public class MainView extends JFrame implements MainControllerObserver {
 	}
 
 	private void initComponents() {
-		this.desktopPane = new MainDesktopPane();
+		this.menuBar 	 = new MainMenuBar(this.mainController);
+		this.desktopPane = new MainDesktopPane(this.mainController);
 	}
 	
 	private void addComponents() {
+		this.setJMenuBar(this.menuBar);
 		this.setContentPane(this.desktopPane);
+	}
+
+	@Override
+	public void systemWillBeClosed() {
+		JOptionPane.showMessageDialog(this, "Obrigado por jogar!");
+	}
+
+	@Override
+	public void showSystemInformation() {
+		JOptionPane.showMessageDialog(this, "Exibindo informações do sistema.");
+	}
+
+	@Override
+	public void gameWasBeStarted() {
+		JOptionPane.showMessageDialog(this, "O jogo foi iniciado.");
 	}
 	
 }
