@@ -1,13 +1,13 @@
-package controller.factory;
+package game.controller.factory;
 
-import model.DarkenedNenufar;
-import model.Nenufar;
-import model.NenufarInterface;
-import model.NenufarType;
-import model.RedFlowerNenufar;
-import model.RedFrogNenufar;
-import model.YellowFlowerNenufar;
-import model.YellowFrogNenufar;
+import game.model.DarkenedNenufar;
+import game.model.Nenufar;
+import game.model.NenufarInterface;
+import game.model.NenufarType;
+import game.model.RedFlowerNenufar;
+import game.model.RedFrogNenufar;
+import game.model.YellowFlowerNenufar;
+import game.model.YellowFrogNenufar;
 
 public class NenufarFactory {
 	

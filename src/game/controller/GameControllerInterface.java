@@ -1,9 +1,12 @@
-package controller;
+package game.controller;
 
 public interface GameControllerInterface {
 	
-	int getRowCount();
-	int getColumnCount();
-	String getValueAt(int rowIndex, int columnIndex);
+	void attach(GameControllerObserver observer);
+	void startGame();
+	int getBoardRows();
+	int getBoardCols();
+	String getBoardElementAt(int rowIndex, int columnIndex);
+	String getGameTitle();
 
 }

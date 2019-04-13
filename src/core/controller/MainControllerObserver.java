@@ -6,6 +6,6 @@ public interface MainControllerObserver {
 
 	void showSystemInformation();
 
-	void gameWasBeStarted();
+	void gameWillBeStarted();
 
 }

@@ -1,15 +1,12 @@
-package controller.factory;
+package game.controller.factory;
 
-import model.NenufarBoardType;
-import model.NenufarInterface;
-import model.NenufarType;
-import model.utils.Board;
+import game.model.NenufarBoard;
+import game.model.NenufarBoardType;
+import game.model.NenufarType;
 
 public class NenufarBoardFactory {
 	
 	private static NenufarBoardFactory instance;
-	private final int COLS = 5;
-	private final int ROWS = 5;
 	
 	public synchronized static NenufarBoardFactory getInstance() {
 		if(instance == null) {
@@ -22,12 +19,12 @@ public class NenufarBoardFactory {
 		
 	}
 	
-	private Board<NenufarInterface> createBoard() {
-		return new Board<>(ROWS, COLS);
+	private NenufarBoard createBoard() {
+		return new NenufarBoard();
 	}
 	
-	public Board<NenufarInterface> create(NenufarBoardType boardType) {
-		Board<NenufarInterface> board = null;
+	public NenufarBoard create(NenufarBoardType boardType) {
+		NenufarBoard board = null;
 		switch (boardType) {
 			case START:
 				board = createStartBoard();
@@ -40,35 +37,35 @@ public class NenufarBoardFactory {
 		return board;
 	}
 	
-	private Board<NenufarInterface> createStartBoard() {
+	private NenufarBoard createStartBoard() {
 		NenufarFactory nenufarFactory = NenufarFactory.getInstance();
-		Board<NenufarInterface> startBoard = createBoard();
+		NenufarBoard startBoard = createBoard();
 		
 		//Linha 1
-		startBoard.getCell(0, 0).setElement(nenufarFactory.create(NenufarType.NENUFAR));
-		startBoard.getCell(0, 2).setElement(nenufarFactory.create(NenufarType.NENUFAR));
-		startBoard.getCell(0, 4).setElement(nenufarFactory.create(NenufarType.NENUFAR));
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 0, 0);
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 0, 2);
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 0, 4);
 		
 		//Linha 2
-		startBoard.getCell(1, 1).setElement(nenufarFactory.create(NenufarType.NENUFAR));
-		startBoard.getCell(1, 2).setElement(nenufarFactory.create(NenufarType.NENUFAR));
-		startBoard.getCell(1, 3).setElement(nenufarFactory.create(NenufarType.NENUFAR));
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 1, 1);
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 1, 2);
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 1, 3);
 		
 		//Linha 3
-		startBoard.getCell(2, 0).setElement(nenufarFactory.create(NenufarType.NENUFAR));
-		startBoard.getCell(2, 1).setElement(nenufarFactory.create(NenufarType.NENUFAR));
-		startBoard.getCell(2, 3).setElement(nenufarFactory.create(NenufarType.YELLOW_FROG_NENUFAR));
-		startBoard.getCell(2, 4).setElement(nenufarFactory.create(NenufarType.NENUFAR));
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 2, 0);
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 2, 1);
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.YELLOW_FROG_NENUFAR), 2, 3);
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 2, 4);
 		
 		//Linha 4
-		startBoard.getCell(3, 1).setElement(nenufarFactory.create(NenufarType.RED_FROG_NENUFAR));
-		startBoard.getCell(3, 2).setElement(nenufarFactory.create(NenufarType.NENUFAR));
-		startBoard.getCell(3, 3).setElement(nenufarFactory.create(NenufarType.DARKENED_NENUFAR));
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.RED_FROG_NENUFAR), 3, 1);
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 3, 2);
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.DARKENED_NENUFAR), 3, 3);
 		
 		//Linha 5
-		startBoard.getCell(4, 0).setElement(nenufarFactory.create(NenufarType.NENUFAR));
-		startBoard.getCell(4, 2).setElement(nenufarFactory.create(NenufarType.NENUFAR));
-		startBoard.getCell(4, 4).setElement(nenufarFactory.create(NenufarType.NENUFAR));
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 4, 0);
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 4, 2);
+		startBoard.setElementAtCell(nenufarFactory.create(NenufarType.NENUFAR), 4, 4);
 		
 		return startBoard;
 	}

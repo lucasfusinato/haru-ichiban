@@ -2,8 +2,8 @@ package model.utils;
 
 public class Board<E> {
 	
-	public final int ROWS;
-	public final int COLS;
+	private final int ROWS;
+	private final int COLS;
 	private Square<E>[][] cells;
 	
 	public Board(int rows, int cols) {
@@ -28,6 +28,10 @@ public class Board<E> {
 
 	public E getElementAtCell(int rowIndex, int columnIndex) {
 		return getCell(rowIndex, columnIndex).getElement();
+	}
+
+	public void setElementAtCell(E element, int rowIndex, int columnIndex) {
+		getCell(rowIndex, columnIndex).setElement(element);
 	}
 	
 	public final int getRows() {

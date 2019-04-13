@@ -7,6 +7,7 @@ import java.util.List;
 import core.controller.command.AboutCommand;
 import core.controller.command.ExitCommand;
 import core.controller.command.NewGameCommand;
+import game.controller.GameController;
 import utils.Command;
 
 public class MainController implements MainControllerInterface {
@@ -64,7 +65,8 @@ public class MainController implements MainControllerInterface {
 
 	@Override
 	public void startNewGame() {
-		this.notifyGameWasBeStarted();
+		this.notifyGameWillBeStarted();
+		GameController.getInstance().startGame();
 	}
 
 	protected void notifySystemWillBeClosed() {
@@ -79,15 +81,20 @@ public class MainController implements MainControllerInterface {
 		}
 	}
 
-	protected void notifyGameWasBeStarted() {
+	protected void notifyGameWillBeStarted() {
 		for(MainControllerObserver observer : this.observers) {
-			observer.gameWasBeStarted();
+			observer.gameWillBeStarted();
 		}
 	}
 
 	@Override
 	public String getSystemTitle() {
 		return "Haru Ichiban";
+	}
+
+	@Override
+	public String getSystemInformation() {
+		return "Desenvolvido por Lucas Fusinato Wilhelm Chiodini Zanis e João Victor Arruda";
 	}
 
 }

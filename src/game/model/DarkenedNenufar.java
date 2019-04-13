@@ -1,4 +1,4 @@
-package model;
+package game.model;
 
 public class DarkenedNenufar implements NenufarInterface {
 

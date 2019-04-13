@@ -14,4 +14,6 @@ public interface MainControllerInterface {
 	
 	String getSystemTitle();
 
+	Object getSystemInformation();
+
 }

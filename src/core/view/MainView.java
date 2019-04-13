@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import core.controller.MainController;
 import core.controller.MainControllerInterface;
 import core.controller.MainControllerObserver;
+import game.view.GameView;
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame implements MainControllerObserver {
@@ -29,7 +30,7 @@ public class MainView extends JFrame implements MainControllerObserver {
 	private void defineProperties() {
 		this.defineController();
 		this.setTitle(this.mainController.getSystemTitle());
-		this.setSize(800, 600);
+		this.setSize(500, 400);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
@@ -57,12 +58,13 @@ public class MainView extends JFrame implements MainControllerObserver {
 
 	@Override
 	public void showSystemInformation() {
-		JOptionPane.showMessageDialog(this, "Exibindo informações do sistema.");
+		JOptionPane.showMessageDialog(this, this.mainController.getSystemInformation());
 	}
 
 	@Override
-	public void gameWasBeStarted() {
-		JOptionPane.showMessageDialog(this, "O jogo foi iniciado.");
+	public void gameWillBeStarted() {
+		JFrame gameView = new GameView();
+		gameView.setVisible(true);
 	}
 	
 }

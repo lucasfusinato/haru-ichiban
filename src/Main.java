@@ -1,11 +1,17 @@
 
-import view.GameView;
+import core.view.MainView;
 
-public class Main {
+public class Main implements Runnable {
 
 	public static void main(String[] args) {
-		GameView gameView = new GameView();
-		gameView.setVisible(true);
+		Thread thread = new Thread(new Main());
+		thread.start();
+	}
+
+	@Override
+	public void run() {
+		MainView view = new MainView();
+		view.setVisible(true);
 	}
 	
 }
