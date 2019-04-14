@@ -1,5 +1,7 @@
 package core.controller;
 
+import game.controller.GameControllerInterface;
+
 public interface MainControllerInterface {
 
 	void attach(MainControllerObserver observer);
@@ -15,5 +17,7 @@ public interface MainControllerInterface {
 	String getSystemTitle();
 
 	Object getSystemInformation();
+
+	GameControllerInterface getGameController();
 
 }

@@ -1,21 +1,18 @@
 package core.view;
 
-import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 
 import core.controller.MainController;
 import core.controller.MainControllerInterface;
 import core.controller.MainControllerObserver;
-import game.view.GameView;
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame implements MainControllerObserver {
 
 	private MainControllerInterface mainController;
-	private JMenuBar menuBar;
-	private JDesktopPane desktopPane;
+	private MainMenuBar menuBar;
+	private MainDesktopPane desktopPane;
 
 	public MainView() {
 		this.init();
@@ -25,6 +22,8 @@ public class MainView extends JFrame implements MainControllerObserver {
 		this.defineProperties();
 		this.initComponents();
 		this.addComponents();
+		this.menuBar.setMenuOptionsVisible(false);
+		this.desktopPane.openMainMenu();
 	}
 
 	private void defineProperties() {
@@ -34,6 +33,7 @@ public class MainView extends JFrame implements MainControllerObserver {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
+		this.setUndecorated(true);
 	}
 
 	private void defineController() {
@@ -63,8 +63,9 @@ public class MainView extends JFrame implements MainControllerObserver {
 
 	@Override
 	public void gameWillBeStarted() {
-		JFrame gameView = new GameView();
-		gameView.setVisible(true);
+		this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		this.menuBar.setMenuOptionsVisible(true);
+		this.desktopPane.openGame();
 	}
 	
 }

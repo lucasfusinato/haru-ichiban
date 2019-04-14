@@ -8,6 +8,7 @@ import core.controller.command.AboutCommand;
 import core.controller.command.ExitCommand;
 import core.controller.command.NewGameCommand;
 import game.controller.GameController;
+import game.controller.GameControllerInterface;
 import utils.Command;
 
 public class MainController implements MainControllerInterface {
@@ -15,6 +16,7 @@ public class MainController implements MainControllerInterface {
 	private static MainController instance;
 	private List<MainControllerObserver> observers;
 	private HashMap<MainMenuOption, Command> mainMenuCommands;
+	private GameControllerInterface gameController;
 	
 	public static MainControllerInterface getInstance() {
 		if(instance == null) {
@@ -28,7 +30,8 @@ public class MainController implements MainControllerInterface {
 	}
 
 	private void init() {
-		this.observers = new ArrayList<>();
+		this.gameController	  = GameController.getInstance();
+		this.observers 		  = new ArrayList<>();
 		this.mainMenuCommands = new HashMap<>();
 		this.defineMainMenuCommands();
 	}
@@ -66,7 +69,7 @@ public class MainController implements MainControllerInterface {
 	@Override
 	public void startNewGame() {
 		this.notifyGameWillBeStarted();
-		GameController.getInstance().startGame();
+		this.gameController.startGame();
 	}
 
 	protected void notifySystemWillBeClosed() {
@@ -95,6 +98,11 @@ public class MainController implements MainControllerInterface {
 	@Override
 	public String getSystemInformation() {
 		return "Desenvolvido por Lucas Fusinato Wilhelm Chiodini Zanis e João Victor Arruda";
+	}
+
+	@Override
+	public GameControllerInterface getGameController() {
+		return this.gameController;
 	}
 
 }

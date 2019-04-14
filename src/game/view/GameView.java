@@ -1,37 +1,27 @@
 package game.view;
 
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
-import game.controller.GameController;
 import game.controller.GameControllerInterface;
-import game.controller.GameControllerObserver;
 
 @SuppressWarnings("serial")
-public class GameView extends JFrame implements GameControllerObserver {
+public class GameView extends JInternalFrame {
 	
 	private GameControllerInterface gameController;
 	private JPanel gamePanel;
 
-	public GameView() {
-		this.init();
+	public GameView(GameControllerInterface gameController) {
+		this.init(gameController);
 	}
 	
-	private void init() {
-		this.defineProperties();
+	private void init(GameControllerInterface gameController) {
+		this.gameController = gameController;
+		this.setTitle(this.gameController.getGameTitle());
 		this.initComponents();
 		this.addComponents();
 	}
 
-	private void defineProperties() {
-		this.defineController();
-		setTitle(this.gameController.getGameTitle());
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setResizable(false);
-		setLocationRelativeTo(null);
-	}
-	
 	private void initComponents() {
 		this.gamePanel = new GamePanel(this.gameController);
 	}
@@ -40,14 +30,4 @@ public class GameView extends JFrame implements GameControllerObserver {
 		this.setContentPane(this.gamePanel);
 	}
 
-	private void defineController() {
-		this.gameController = GameController.getInstance();
-		this.gameController.attach(this);
-	}
-
-	@Override
-	public void gameWasBeStarted() {
-		this.gamePanel.updateUI();
-	}
-	
 }

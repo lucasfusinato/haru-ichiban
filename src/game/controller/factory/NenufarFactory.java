@@ -2,7 +2,7 @@ package game.controller.factory;
 
 import game.model.DarkenedNenufar;
 import game.model.Nenufar;
-import game.model.NenufarInterface;
+import game.model.ComponentInterface;
 import game.model.NenufarType;
 import game.model.RedFlowerNenufar;
 import game.model.RedFrogNenufar;
@@ -24,8 +24,8 @@ public class NenufarFactory {
 		
 	}
 
-	public NenufarInterface create(NenufarType nenufarType) {
-		NenufarInterface nenufar = null;
+	public ComponentInterface create(NenufarType nenufarType) {
+		ComponentInterface nenufar = null;
 		switch (nenufarType) {
 			case DARKENED_NENUFAR:
 				nenufar = new DarkenedNenufar();

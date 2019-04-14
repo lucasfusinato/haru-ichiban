@@ -7,12 +7,14 @@ import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
 import core.controller.MainControllerInterface;
+import game.view.GameView;
 
 @SuppressWarnings("serial")
 public class MainDesktopPane extends JDesktopPane {
 
 	private MainControllerInterface mainController;
 	private JInternalFrame mainMenuFrame;
+	private JInternalFrame gameFrame;
 	
 	public MainDesktopPane(MainControllerInterface mainController) {
 		this.init(mainController);
@@ -22,26 +24,35 @@ public class MainDesktopPane extends JDesktopPane {
 		this.mainController = mainController;
 		this.initComponents();
 		this.addComponents();
-		this.openStartFrame();
+		this.openMainMenu();
 	}
 
 	private void initComponents() {
 		this.mainMenuFrame = new MainMenuFrame(this.mainController);
+		this.gameFrame	   = new GameView(this.mainController.getGameController());
 	}
 	
 	private void addComponents() {
 		this.add(this.mainMenuFrame);
+		this.add(this.gameFrame);
 	}
 
-	private void openStartFrame() {
-		JInternalFrame startFrame = this.mainMenuFrame;
+	public void openMainMenu() {
+		this.openFrame(this.mainMenuFrame);
+	}
+	
+	public void openGame() {
+		this.openFrame(this.gameFrame);
+	}
+	
+	protected void openFrame(JInternalFrame frame) {
 		try {
-			startFrame.setSelected(true);
-			startFrame.setMaximum(true);
+			frame.setSelected(true);
+			frame.setMaximum(true);
 		} catch (PropertyVetoException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 		}
-		startFrame.setVisible(true);
+		frame.setVisible(true);
 	}
 
 }

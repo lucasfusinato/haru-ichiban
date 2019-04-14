@@ -1,6 +1,6 @@
 package game.model;
 
-public class DarkenedNenufar implements NenufarInterface {
+public class DarkenedNenufar implements ComponentInterface {
 
 	@Override
 	public String getImagePath() {

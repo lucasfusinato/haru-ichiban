@@ -1,15 +1,18 @@
 package game.view;
 
+import java.awt.Color;
+
 import javax.swing.JTable;
 
 import game.controller.GameControllerInterface;
+import game.view.listeners.GameBoardMouseListener;
 
 @SuppressWarnings("serial")
 public class GameBoard extends JTable {
 	
 	private GameControllerInterface gameController;
 	private GameBoardModel gameBoardModel;
-	private GameBoardCellRenderer gameBoardCellRenderer;
+	private DefaultGameBoardCellRenderer gameBoardCellRenderer;
 	
 	public GameBoard(GameControllerInterface gameController) {
 		this.init(gameController);
@@ -17,14 +20,21 @@ public class GameBoard extends JTable {
 	
 	private void init(GameControllerInterface gameController) {
 		this.gameController = gameController;
-		this.setRowHeight(100);
+		this.defineProperties();
 		this.initComponents();
 		this.addComponents();
 	}
 
+	private void defineProperties() {
+		this.setRowHeight(100);
+		this.setOpaque(false);
+		this.setGridColor(new Color(170, 227, 250));
+		this.addMouseListener(new GameBoardMouseListener(this, this.gameController));
+	}
+
 	private void initComponents() {
 		this.gameBoardModel 		= new GameBoardModel(this.gameController);
-		this.gameBoardCellRenderer  = new GameBoardCellRenderer();
+		this.gameBoardCellRenderer  = new DefaultGameBoardCellRenderer();
 	}
 
 	private void addComponents() {

@@ -14,7 +14,8 @@ import core.view.listeners.MainMenuActionListener;
 public class MainMenuBar extends JMenuBar {
 
 	private MainControllerInterface mainController;
-	private JMenu mainMenu;
+	private JMenu titleMenu;
+	private JMenu optionsMenu;
 	private HashMap<MainMenuOption, JMenuItem> menuOptions;
 	
 	public MainMenuBar(MainControllerInterface mainController) {
@@ -29,20 +30,23 @@ public class MainMenuBar extends JMenuBar {
 
 	private void defineProperties(MainControllerInterface mainController) {
 		this.mainController = mainController;
-		this.mainMenu 		= new JMenu("Menu Principal");
 		this.menuOptions 	= new HashMap<>();
 	}
 
 	private void initComponents() {
+		this.titleMenu = new JMenu(mainController.getSystemTitle());
+		this.titleMenu.setEnabled(false);
+		this.optionsMenu  = new JMenu("Opções");
 		for(MainMenuOption mainMenuOption : MainMenuOption.values()) {
 			this.menuOptions.put(mainMenuOption, this.createMenuItem(mainMenuOption));
 		}
 	}
 
 	private void addComponents() {
-		this.add(this.mainMenu);
+		this.add(this.titleMenu);
+		this.add(this.optionsMenu);
 		for(MainMenuOption mainMenuOption : MainMenuOption.values()) {
-			this.mainMenu.add(this.menuOptions.get(mainMenuOption));
+			this.optionsMenu.add(this.menuOptions.get(mainMenuOption));
 		}
 	}
 
@@ -50,6 +54,10 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem menuItem = new JMenuItem(mainMenuOption.getOption());
 		menuItem.addActionListener(new MainMenuActionListener(this.mainController, mainMenuOption));
 		return menuItem;
+	}
+
+	public void setMenuOptionsVisible(boolean visible) {
+		this.optionsMenu.setVisible(visible);
 	}
 	
 }
