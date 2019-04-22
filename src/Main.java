@@ -6,7 +6,6 @@ import javax.swing.JInternalFrame;
 
 import game.controller.GameController;
 import game.controller.GameControllerInterface;
-import game.model.gardener.GardenerColor;
 import game.view.GameInternalFrame;
 
 public class Main implements Runnable {
@@ -29,7 +28,6 @@ public class Main implements Runnable {
 			gameInternalFrame.setSelected(true);
 			gameInternalFrame.setMaximum(true);
 		} catch (PropertyVetoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		gameInternalFrame.setVisible(true);

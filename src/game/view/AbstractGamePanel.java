@@ -133,5 +133,11 @@ public abstract class AbstractGamePanel extends JPanel implements GameController
 	public void showInvalidMoveError(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
-	
+
+	@Override
+	public void updateRoundGardeners(String seniorGardener, String juniorGardener) {
+		JOptionPane.showMessageDialog(this, "Jardineiro sênior: " + seniorGardener	+ "\n"
+										  + "Jardineiro júnior: " + juniorGardener);
+	}
+
 }

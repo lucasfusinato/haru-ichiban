@@ -9,7 +9,6 @@ import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.tools.Tool;
 
 import game.controller.GameControllerInterface;
 import utils.view.ImageIconFactory;

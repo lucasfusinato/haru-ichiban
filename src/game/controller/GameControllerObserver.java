@@ -13,5 +13,6 @@ public interface GameControllerObserver {
 	void gameHasEnded(String name);
 	void gameHasEnded();
 	void showInvalidMoveError(String message);
+	void updateRoundGardeners(String seniorGardener, String juniorGardener);
 	
 }

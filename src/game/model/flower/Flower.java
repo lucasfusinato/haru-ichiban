@@ -5,6 +5,7 @@ import game.model.ComponentInterface;
 public abstract class Flower implements ComponentInterface, Cloneable {
 
 	private boolean numberVisible;
+	private boolean disabled;
 	private boolean selected;
 	private int number;
 	
@@ -15,7 +16,13 @@ public abstract class Flower implements ComponentInterface, Cloneable {
 
 	@Override
 	public String getImagePath() {
-		return (this.isNumberVisible() ? this.getNumberFlowerImagePath() : (this.isSelected() ? this.getSelectedFlowerImagePath() : this.getFlowerImagePath()));
+		if(this.isDisabled()) {
+			return this.getDisabledFlowerImagePath();
+		} else if(this.isNumberVisible()) {
+			return this.getNumberFlowerImagePath();
+		} else {
+			return this.getFlowerImagePath();
+		}
 	}
 
 	@Override
@@ -23,7 +30,7 @@ public abstract class Flower implements ComponentInterface, Cloneable {
 		return (Flower) super.clone();
 	}
 
-	protected abstract String getSelectedFlowerImagePath();
+	protected abstract String getDisabledFlowerImagePath();
 	protected abstract String getNumberFlowerImagePath();
 	protected abstract String getFlowerImagePath();
 
@@ -38,13 +45,21 @@ public abstract class Flower implements ComponentInterface, Cloneable {
 	public void setNumberVisible(boolean numberVisible) {
 		this.numberVisible = numberVisible;
 	}
-
+	
 	public boolean isSelected() {
 		return selected;
 	}
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 
 }

@@ -7,8 +7,8 @@ public class RedFlower extends Flower {
 	}
 
 	@Override
-	protected String getSelectedFlowerImagePath() {
-		return "images/red-flower.png";
+	protected String getDisabledFlowerImagePath() {
+		return "images/lighted-red-flower.png";
 	}
 
 	@Override
@@ -18,7 +18,7 @@ public class RedFlower extends Flower {
 
 	@Override
 	protected String getFlowerImagePath() {
-		return "images/darkened-red-flower.png";
+		return "images/red-flower.png";
 	}
 
 }

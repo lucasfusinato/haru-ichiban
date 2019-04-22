@@ -37,9 +37,13 @@ public abstract class Gardener {
 	public String getName() {
 		return this.name;
 	}
-	
+
 	public void addPoint() {
 		this.points++;
+	}
+	
+	public void addPoints(int points) {
+		this.points += points;
 	}
 
 	public int getPoints() {
