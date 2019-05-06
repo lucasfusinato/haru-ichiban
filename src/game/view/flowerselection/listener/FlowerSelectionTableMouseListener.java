@@ -1,50 +1,84 @@
 package game.view.flowerselection.listener;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import game.controller.GameControllerInterface;
-import game.model.gardener.GardenerColor;
-import game.view.flowerselection.FlowerSelectionTable;
+import javax.swing.JTable;
+
+import game.controller.command.FlowerMouseCommandFactory;
+import utils.CommandInvoker;
 
 public class FlowerSelectionTableMouseListener implements MouseListener {
 
-	private FlowerSelectionTable flowerSelectionTable;
-	private GameControllerInterface gameController;
-	private GardenerColor gardenerColor;
+	private FlowerMouseCommandFactory mouseCommandFactory;
+	private CommandInvoker commandInvoker;
+	private boolean vertical;
 
-	public FlowerSelectionTableMouseListener(FlowerSelectionTable flowerSelectionTable) {
-		this.flowerSelectionTable 	= flowerSelectionTable;
-		this.gameController 		= flowerSelectionTable.getGameController();
-		this.gardenerColor 			= flowerSelectionTable.getGardenerColor();
+	public FlowerSelectionTableMouseListener(FlowerMouseCommandFactory mouseCommandFactory) {
+		this(mouseCommandFactory, true);
+	}
+
+	public FlowerSelectionTableMouseListener(FlowerMouseCommandFactory mouseCommandFactory, boolean vertical) {
+		this.mouseCommandFactory = mouseCommandFactory;
+		this.commandInvoker = new CommandInvoker();
+		this.vertical = vertical;
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		this.gameController.mouseClickedInFlower(this.gardenerColor, this.flowerSelectionTable.getSelectedRow());
+		try {
+			commandInvoker.execute(mouseCommandFactory.createClickFlowerCommand(getIndex(e)));
+		} catch (Exception ex) {
+			//TODO implementar classe padrão para tratamento dos erros
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		try {
+			commandInvoker.execute(mouseCommandFactory.createPressFlowerCommand(getIndex(e)));
+		} catch (Exception ex) {
+			//TODO implementar classe padrão para tratamento dos erros
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		try {
+			commandInvoker.execute(mouseCommandFactory.createReleaseFlowerCommand(getIndex(e)));
+		} catch (Exception ex) {
+			//TODO implementar classe padrão para tratamento dos erros
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		try {
+			commandInvoker.execute(mouseCommandFactory.createEnterFlowerCommand(getIndex(e)));
+		} catch (Exception ex) {
+			//TODO implementar classe padrão para tratamento dos erros
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		this.gameController.mouseExitedFlowers(this.gardenerColor);
+		try {
+			commandInvoker.execute(mouseCommandFactory.createExitFlowerCommand(getIndex(e)));
+		} catch (Exception ex) {
+			//TODO implementar classe padrão para tratamento dos erros
+			ex.printStackTrace();
+		}
+	}
+
+	private int getIndex(MouseEvent e) {
+		JTable table = ((JTable) e.getSource());
+		Point point = e.getPoint();
+		return (this.vertical) ? table.rowAtPoint(point) : table.columnAtPoint(point);
 	}
 
 }

@@ -1,18 +1,27 @@
 package game.controller;
 
 public interface GameControllerObserver {
-	
-	void gameHasStarted();
-	void gameBoardHasBeenUpdated();
-	void gameStatusHasBeenUpdated(String gameStatus);
-	void scoringHasBeenUpdated(int score1, int score2);
-	void redFlowerHasBeenSelected(int number);
-	void redFlowersHasBeenUpdated();
-	void yellowFlowerHasBeenSelected(int number);
-	void yellowFlowersHasBeenUpdated();
-	void gameHasEnded(String name);
-	void gameHasEnded();
-	void showInvalidMoveError(String message);
-	void updateRoundGardeners(String seniorGardener, String juniorGardener);
-	
+
+	void updateRedFlowers();
+
+	void updateYellowFlowers();
+
+	void updateGardeners(String seniorGardener, String juniorGardener);
+
+	void updateStatus(String status);
+
+	void updateBoard();
+
+	void requestRedFlowerWithdraw();
+
+	void requestYellowFlowerWithdraw();
+
+	void updateWithdrawRedFlowers();
+
+	void updateWithdrawYellowFlowers();
+
+	void withdrawedRedFlowers();
+
+	void withdrawedYellowFlowers();
+
 }

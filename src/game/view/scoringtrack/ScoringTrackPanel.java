@@ -1,42 +1,61 @@
 package game.view.scoringtrack;
 
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 
-import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+
+import utils.view.BlackTransparentColor;
+import utils.view.ResizedImageIconFactory;
 
 @SuppressWarnings("serial")
-public class ScoringTrackPanel extends AbstractScoringTrackPanel {
+public class ScoringTrackPanel extends AbstractScoreboardPanel {
 	
-	private JLabel scoreLabel1;
-	private JLabel scoreLabel2;
+	private ScoringTrackTable scoringTrack;
 	
 	public ScoringTrackPanel() {
+		super();
 		this.init();
 	}
 
 	private void init() {
+		setBackground(new BlackTransparentColor());
 		this.initComponents();
 		this.addComponents();
 	}
 
 	private void initComponents() {
-		this.scoreLabel1 = new JLabel();
-		this.scoreLabel2 = new JLabel();
+		this.scoringTrack = new ScoringTrackTable();
 	}
 
 	private void addComponents() {
-		GridLayout layout = new GridLayout();
-		layout.setHgap(50);
-		this.setLayout(layout);
-		
-		this.add(this.scoreLabel1);
-		this.add(this.scoreLabel2);
+		this.setLayout(new GridLayout());
+		this.add(this.scoringTrack);
 	}
 
 	@Override
 	public void updateScore(int score1, int score2) {
-		this.scoreLabel1.setText("Jogador 1: " + score1 + " pontos");
-		this.scoreLabel2.setText("Jogador 2: " + score2 + " pontos");
+		this.scoringTrack.refreshTrack(score1, score2);
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(createBackgroundImage(), 0, 0, getWidth(), getHeight(), this);
+	}
+	
+	private Image createBackgroundImage() {
+		ImageIcon imageIcon = ResizedImageIconFactory.create(getBackgroundImagePath(), this.getWidth(), this.getHeight());
+		if(imageIcon != null) {
+			return imageIcon.getImage();
+		} else {
+			return null;
+		}
+	}
+	
+	private String getBackgroundImagePath() {
+		return "images/scoring-track-background.png";
 	}
 
 }

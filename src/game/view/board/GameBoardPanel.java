@@ -9,16 +9,12 @@ public class GameBoardPanel extends AbstractGameBoardPanel {
 
 	public GameBoardPanel(GameControllerInterface gameController) {
 		super(gameController);
+		setOpaque(false);
 	}
 
 	@Override
 	protected JTable createGameBoard() {
 		return new GameBoard(this.getGameController());
-	}
-
-	@Override
-	protected String getBackgroundImagePath() {
-		return "images/board-background.png";
 	}
 
 }

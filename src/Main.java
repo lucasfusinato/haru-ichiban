@@ -1,12 +1,17 @@
 import java.beans.PropertyVetoException;
 
 import javax.swing.JDesktopPane;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import game.controller.GameController;
 import game.controller.GameControllerInterface;
+import game.model.Player;
+import game.model.gardener.GardenerColor;
 import game.view.GameInternalFrame;
+import game.view.ViewUtils;
 
 public class Main implements Runnable {
 
@@ -16,13 +21,17 @@ public class Main implements Runnable {
 	
 	@Override
 	public void run() {
+		ViewUtils.loadSources();
 		JFrame framePrincipal = new JFrame();
-		framePrincipal.setSize(1000, 700);
+		framePrincipal.setResizable(false);
+		framePrincipal.setSize(1100, 600);
 		framePrincipal.setLocationRelativeTo(null);
 		JDesktopPane desktopPane = new JDesktopPane();
 		GameControllerInterface gameController = GameController.getInstance();
-		gameController.startGame();
+		gameController.startGame(new Player("Lucas", GardenerColor.RED), new Player("João", GardenerColor.YELLOW));
 		JInternalFrame gameInternalFrame = new GameInternalFrame(gameController);
+		gameInternalFrame.setBorder(null);
+		((BasicInternalFrameUI) gameInternalFrame.getUI()).setNorthPane(null);
 		desktopPane.add(gameInternalFrame);
 		try {
 			gameInternalFrame.setSelected(true);
@@ -33,6 +42,7 @@ public class Main implements Runnable {
 		gameInternalFrame.setVisible(true);
 		framePrincipal.setContentPane(desktopPane);
 		framePrincipal.setVisible(true);
+		framePrincipal.setTitle("Haru ichiban");
 	}
 
 }

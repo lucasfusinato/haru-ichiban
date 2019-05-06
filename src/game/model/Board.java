@@ -22,6 +22,10 @@ public class Board<E> {
 		}
 	}
 
+	public boolean isOutOfBounds(int x, int y) {
+		return x < 0 || y < 0 || x >= ROWS || y >= COLS;
+	}
+
 	public Square<E> getSquare(int rowIndex, int columnIndex) {
 		return this.cells[rowIndex][columnIndex];
 	}

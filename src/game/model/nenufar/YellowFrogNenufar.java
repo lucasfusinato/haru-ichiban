@@ -1,15 +1,12 @@
 package game.model.nenufar;
 
-public class YellowFrogNenufar extends Nenufar {
+import game.model.frog.YellowFrog;
 
-	@Override
-	protected String getNenufarImagePath() {
-		return "images/yellow-frog-nenufar.png";
+public class YellowFrogNenufar extends LightedNenufar {
+
+	public YellowFrogNenufar() {
+		super();
+		setElement(new YellowFrog());
 	}
-
-	@Override
-	protected String getSelectedNenufarImagePath() {
-		return "images/selected-yellow-frog-nenufar.png";
-	}
-
+	
 }

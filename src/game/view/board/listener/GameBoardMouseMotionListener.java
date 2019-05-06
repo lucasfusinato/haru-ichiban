@@ -23,7 +23,7 @@ public class GameBoardMouseMotionListener implements MouseMotionListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		this.gameController.mouseMovedToBoardSquare(this.getRowIndex(e), this.getColumnIndex(e));
+		// TODO Auto-generated method stub
 	}
 
 	protected int getRowIndex(MouseEvent e) {

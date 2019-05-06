@@ -20,11 +20,11 @@ public class Square<E> {
 		this.element = element;
 	}
 
-	public int getX() {
+	public int getRow() {
 		return x;
 	}
 
-	public int getY() {
+	public int getColumn() {
 		return y;
 	}
 	

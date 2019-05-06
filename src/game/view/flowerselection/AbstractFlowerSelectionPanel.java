@@ -3,13 +3,12 @@ package game.view.flowerselection;
 import javax.swing.JPanel;
 
 import game.controller.GameControllerInterface;
-import game.model.gardener.GardenerColor;
 
 @SuppressWarnings("serial")
 public abstract class AbstractFlowerSelectionPanel extends JPanel {
 
 	private GameControllerInterface gameController;
-	private FlowerSelectionTable flowerSelectionTable;
+	private AbstractFlowerSelectionTable flowerSelectionTable;
 
 	public AbstractFlowerSelectionPanel(GameControllerInterface gameController) {
 		this.gameController = gameController;
@@ -17,20 +16,21 @@ public abstract class AbstractFlowerSelectionPanel extends JPanel {
 	}
 
 	private void init() {
+		setOpaque(false);
 		this.initComponents();
 		this.addComponents();
 	}
 
 	private void initComponents() {
-		this.flowerSelectionTable = new FlowerSelectionTable(this.gameController, this.getFlowerColor());
+		this.flowerSelectionTable = createFlowerSelectionTable();
 	}
 
 	private void addComponents() {
-		this.add(this.flowerSelectionTable);
+		add(flowerSelectionTable);
 	}
 	
-	protected abstract GardenerColor getFlowerColor();
-
+	protected abstract AbstractFlowerSelectionTable createFlowerSelectionTable();
+	
 	public void refreshFlowers() {
 		this.flowerSelectionTable.updateUI();
 	}
@@ -39,7 +39,7 @@ public abstract class AbstractFlowerSelectionPanel extends JPanel {
 		return gameController;
 	}
 
-	protected FlowerSelectionTable getFlowerSelectionTable() {
+	protected AbstractFlowerSelectionTable getFlowerSelectionTable() {
 		return flowerSelectionTable;
 	}
 	

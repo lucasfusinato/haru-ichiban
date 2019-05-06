@@ -5,24 +5,15 @@ import javax.swing.JPanel;
 
 import game.controller.GameControllerInterface;
 import game.controller.GameControllerObserver;
-import game.view.board.AbstractGameBoardPanel;
-import game.view.flowerselection.AbstractFlowerSelectionPanel;
-import game.view.scoringtrack.AbstractScoringTrackPanel;
-import game.view.status.AbstractGameStatusPanel;
+import game.view.gardener.AbstractGardenerPanel;
 
-/**
- * Classe abstrata que define propriedades padrão do painel principal do jogo.
- * @author Lucas Fusinato Wilhelm Chiodini Zanis
- */
 @SuppressWarnings("serial")
 public abstract class AbstractGamePanel extends JPanel implements GameControllerObserver {
 
 	private GameControllerInterface gameController;
-	private AbstractGameBoardPanel gameBoardPanel;
-	private AbstractGameStatusPanel gameStatusPanel;
-	private AbstractScoringTrackPanel scoringTrackPanel;
-	private AbstractFlowerSelectionPanel redFlowerSelectionPanel;
-	private AbstractFlowerSelectionPanel yellowFlowerSelectionPanel;
+	private AbstractGameComponentsPanel gameComponentsPanel;
+	private AbstractGardenerPanel redGardenerPanel;
+	private AbstractGardenerPanel yellowGardenerPanel;
 
 	public AbstractGamePanel(GameControllerInterface gameController) {
 		this.gameController = gameController;
@@ -33,111 +24,91 @@ public abstract class AbstractGamePanel extends JPanel implements GameController
 	private void init() {
 		this.initComponents();
 		this.addComponents();
-		this.gameStatusHasBeenUpdated(this.gameController.getGameStatus());
-		this.scoringHasBeenUpdated(2, 3);
+//		this.updateStatus(this.gameController.getGameStatusDescription());
 	}
 
 	private void initComponents() {
-		this.gameBoardPanel 			= this.createGameBoardPanel();
-		this.gameStatusPanel 			= this.createGameStatusPanel();
-		this.scoringTrackPanel 			= this.createScoringTrackPanel();
-		this.redFlowerSelectionPanel 	= this.createRedFlowerSelectionPanel();
-		this.yellowFlowerSelectionPanel	= this.createYellowFlowerSelectionPanel();
+		this.gameComponentsPanel = this.createGameComponentsPanel();
+		this.redGardenerPanel 	 = this.createRedGardenerPanel();
+		this.yellowGardenerPanel = this.createYellowGardenerPanel();
 	}
 
-	protected abstract void 						addComponents();
-	protected abstract AbstractGameBoardPanel 		createGameBoardPanel();
-	protected abstract AbstractGameStatusPanel 		createGameStatusPanel();
-	protected abstract AbstractScoringTrackPanel 	createScoringTrackPanel();
-	protected abstract AbstractFlowerSelectionPanel	createRedFlowerSelectionPanel();
-	protected abstract AbstractFlowerSelectionPanel	createYellowFlowerSelectionPanel();
+	protected abstract void 					addComponents();
+	protected abstract AbstractGameComponentsPanel 	createGameComponentsPanel();
+	protected abstract AbstractGardenerPanel	createRedGardenerPanel();
+	protected abstract AbstractGardenerPanel	createYellowGardenerPanel();
 
 	protected GameControllerInterface getGameController() {
 		return gameController;
 	}
 
-	protected AbstractGameBoardPanel getGameBoardPanel() {
-		return gameBoardPanel;
+	protected AbstractGameComponentsPanel getGameComponentsPanel() {
+		return gameComponentsPanel;
 	}
 
-	protected AbstractGameStatusPanel getGameStatusPanel() {
-		return gameStatusPanel;
+	protected AbstractGardenerPanel getRedGardenerPanel() {
+		return redGardenerPanel;
 	}
 
-	protected AbstractScoringTrackPanel getScoringTrackPanel() {
-		return scoringTrackPanel;
-	}
-
-	protected AbstractFlowerSelectionPanel getRedFlowerSelectionPanel() {
-		return redFlowerSelectionPanel;
-	}
-
-	protected AbstractFlowerSelectionPanel getYellowFlowerSelectionPanel() {
-		return yellowFlowerSelectionPanel;
+	protected AbstractGardenerPanel getYellowGardenerPanel() {
+		return yellowGardenerPanel;
 	}
 
 	@Override
-	public void gameHasStarted() {
-		this.gameBoardPanel.refreshBoard();
-		this.redFlowerSelectionPanel.refreshFlowers();
-		this.yellowFlowerSelectionPanel.refreshFlowers();
+	public void updateRedFlowers() {
+		this.redGardenerPanel.refreshFlowers();
 	}
 
 	@Override
-	public void gameBoardHasBeenUpdated() {
-		this.gameBoardPanel.refreshBoard();
+	public void updateYellowFlowers() {
+		this.yellowGardenerPanel.refreshFlowers();
 	}
 
 	@Override
-	public void gameStatusHasBeenUpdated(String status) {
-		this.gameBoardPanel.updateMouseImage(this.gameController.getStatusImage());
-		this.gameStatusPanel.setGameStatus(status);
-	}
-	
-	@Override
-	public void scoringHasBeenUpdated(int score1, int score2) {
-		this.scoringTrackPanel.updateScore(score1, score2);
-	}
-
-	@Override
-	public void redFlowerHasBeenSelected(int number) {
-		this.redFlowerSelectionPanel.refreshFlowers();
-	}
-
-	@Override
-	public void redFlowersHasBeenUpdated() {
-		this.redFlowerSelectionPanel.refreshFlowers();
-	}
-
-	@Override
-	public void yellowFlowerHasBeenSelected(int number) {
-		this.yellowFlowerSelectionPanel.refreshFlowers();
-	}
-
-	@Override
-	public void yellowFlowersHasBeenUpdated() {
-		this.yellowFlowerSelectionPanel.refreshFlowers();
-	}
-
-	@Override
-	public void gameHasEnded(String name) {
-		JOptionPane.showMessageDialog(this, "O jogo terminou! O vencedor é: " + name);
-	}
-
-	@Override
-	public void gameHasEnded() {
-		JOptionPane.showMessageDialog(this, "O jogo terminou em empate.");
-	}
-
-	@Override
-	public void showInvalidMoveError(String message) {
-		JOptionPane.showMessageDialog(this, message);
-	}
-
-	@Override
-	public void updateRoundGardeners(String seniorGardener, String juniorGardener) {
+	public void updateGardeners(String seniorGardener, String juniorGardener) {
 		JOptionPane.showMessageDialog(this, "Jardineiro sênior: " + seniorGardener	+ "\n"
-										  + "Jardineiro júnior: " + juniorGardener);
+				  + "Jardineiro júnior: " + juniorGardener);
+	}
+
+	@Override
+	public void updateStatus(String status) {
+		JOptionPane.showMessageDialog(this, status);
+//		gameComponentsPanel.updateStatus(status);
+	}
+
+	@Override
+	public void updateBoard() {
+		gameComponentsPanel.updateBoard();
+	}
+
+	@Override
+	public void requestRedFlowerWithdraw() {
+		redGardenerPanel.openFlowerWithdrawPanel();
+	}
+
+	@Override
+	public void requestYellowFlowerWithdraw() {
+		yellowGardenerPanel.openFlowerWithdrawPanel();
+	}
+
+	@Override
+	public void updateWithdrawRedFlowers() {
+		redGardenerPanel.refreshWithdrawFlowers();
+	}
+
+	@Override
+	public void updateWithdrawYellowFlowers() {
+		yellowGardenerPanel.refreshWithdrawFlowers();
+	}
+
+	@Override
+	public void withdrawedRedFlowers() {
+		redGardenerPanel.closeFlowerWithdrawPanel();
+	}
+
+	@Override
+	public void withdrawedYellowFlowers() {
+		yellowGardenerPanel.closeFlowerWithdrawPanel();
 	}
 
 }

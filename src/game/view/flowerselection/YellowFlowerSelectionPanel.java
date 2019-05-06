@@ -1,7 +1,6 @@
 package game.view.flowerselection;
 
 import game.controller.GameControllerInterface;
-import game.model.gardener.GardenerColor;
 
 @SuppressWarnings("serial")
 public class YellowFlowerSelectionPanel extends AbstractFlowerSelectionPanel {
@@ -11,8 +10,8 @@ public class YellowFlowerSelectionPanel extends AbstractFlowerSelectionPanel {
 	}
 
 	@Override
-	public GardenerColor getFlowerColor() {
-		return GardenerColor.YELLOW;
+	protected YellowFlowerSelectionTable createFlowerSelectionTable() {
+		return new YellowFlowerSelectionTable(getGameController());
 	}
 	
 }

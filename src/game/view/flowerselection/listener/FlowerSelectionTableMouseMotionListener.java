@@ -1,37 +1,48 @@
 package game.view.flowerselection.listener;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
-import game.controller.GameControllerInterface;
-import game.model.gardener.GardenerColor;
-import game.view.flowerselection.FlowerSelectionTable;
+import javax.swing.JTable;
+
+import game.controller.command.FlowerMouseCommandFactory;
+import utils.CommandInvoker;
 
 public class FlowerSelectionTableMouseMotionListener implements MouseMotionListener {
 
-	private FlowerSelectionTable flowerSelectionTable;
-	private GameControllerInterface gameController;
-	private GardenerColor gardenerColor;
-
-	public FlowerSelectionTableMouseMotionListener(FlowerSelectionTable flowerSelectionTable) {
-		this.flowerSelectionTable 	= flowerSelectionTable;
-		this.gameController 		= flowerSelectionTable.getGameController();
-		this.gardenerColor 			= flowerSelectionTable.getGardenerColor();
+	private FlowerMouseCommandFactory mouseCommandFactory;
+	private CommandInvoker commandInvoker;
+	
+	public FlowerSelectionTableMouseMotionListener(FlowerMouseCommandFactory mouseCommandFactory) {
+		this.mouseCommandFactory = mouseCommandFactory;
+		this.commandInvoker = new CommandInvoker();
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		try {
+			commandInvoker.execute(mouseCommandFactory.createDragFlowerCommand(getIndex(e)));
+		} catch (Exception ex) {
+			//TODO implementar classe padrão para tratamento dos erros
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		this.gameController.mouseMovedToFlower(this.gardenerColor, this.getRowIndex(e));
+		try {
+			commandInvoker.execute(mouseCommandFactory.createMoveFlowerCommand(getIndex(e)));
+		} catch (Exception ex) {
+			//TODO implementar classe padrão para tratamento dos erros
+			ex.printStackTrace();
+		}
 	}
 
-	protected int getRowIndex(MouseEvent e) {
-		return this.flowerSelectionTable.rowAtPoint(e.getPoint());
+	private int getIndex(MouseEvent e) {
+		JTable table = ((JTable) e.getSource());
+		Point point = e.getPoint();
+		return table.rowAtPoint(point);
 	}
 
 }

@@ -1,5 +1,7 @@
 package game.model.factory;
 
+import game.model.flower.Flower;
+import game.model.flower.YellowFlower;
 import game.model.gardener.Gardener;
 import game.model.gardener.YellowGardener;
 
@@ -13,10 +15,15 @@ public class YellowGardenerFactory extends AbstractGardenerFactory {
 		}
 		return instance;
 	}
-	
+
 	@Override
-	public Gardener create() {
-		return new YellowGardener("Jardineiro Amarelo");
+	public Gardener createGardener(String name) {
+		return new YellowGardener(name);
 	}
 
+	@Override
+	public Flower createFlower(int number) {
+		return new YellowFlower(number);
+	}
+	
 }

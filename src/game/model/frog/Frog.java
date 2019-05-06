@@ -1,7 +1,7 @@
 package game.model.frog;
 
-import game.model.ComponentInterface;
+import game.model.Element;
 
-public abstract class Frog implements ComponentInterface {
+public abstract class Frog implements Element {
 
 }

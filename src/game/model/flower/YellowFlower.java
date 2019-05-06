@@ -7,18 +7,8 @@ public class YellowFlower extends Flower {
 	}
 
 	@Override
-	protected String getDisabledFlowerImagePath() {
-		return "images/lighted-yellow-flower.png";
-	}
-
-	@Override
-	protected String getNumberFlowerImagePath() {
-		return "images/yellow-flower-"+this.getNumber()+".png";
-	}
-
-	@Override
-	protected String getFlowerImagePath() {
-		return "images/yellow-flower.png";
+	public String getDescription() {
+		return "yellow-flower";
 	}
 
 }

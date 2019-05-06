@@ -3,6 +3,7 @@ package game.view.board;
 import javax.swing.table.AbstractTableModel;
 
 import game.controller.GameControllerInterface;
+import game.view.ViewUtils;
 
 @SuppressWarnings("serial")
 public class GameBoardModel extends AbstractTableModel {
@@ -15,17 +16,23 @@ public class GameBoardModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return this.gameController.getBoardRowCount();
+		return gameController.getBoardRowCount();
 	}
 
 	@Override
 	public int getColumnCount() {
-		return this.gameController.getBoardColumnCount();
+		return gameController.getBoardColumnCount();
 	}
 
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		return this.gameController.getBoardElementImageAt(rowIndex, columnIndex);
+	public String getValueAt(int rowIndex, int columnIndex) {
+		String value = null;
+		if(gameController.hasBoardElementAt(rowIndex, columnIndex)) {
+			value = ViewUtils.createImagePath(gameController.getBoardElementAt(rowIndex, columnIndex));
+		} else if(gameController.hasBoardInfoAt(rowIndex, columnIndex)) {
+			value = ViewUtils.createImagePath(gameController.getBoardInfoAt(rowIndex, columnIndex));
+		}
+		return value;
 	}
 
 }
