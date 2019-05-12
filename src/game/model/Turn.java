@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.model.flower.Flower;
+import game.model.gardener.Gardener;
 import game.model.gardener.GardenerColor;
 
 public class Turn {
@@ -13,8 +14,8 @@ public class Turn {
 	private List<Flower> yellowFlowers;
 	private Flower selectedRedFlower;
 	private Flower selectedYellowFlower;
-	private Player juniorGardener;
-	private Player seniorGardener;
+	private Gardener juniorGardener;
+	private Gardener seniorGardener;
 	
 	public Turn() {
 		redFlowers = new ArrayList<>();
@@ -49,11 +50,11 @@ public class Turn {
 		return selectedYellowFlower.getNumber();
 	}
 
-	public void setJuniorGardener(Player gardener) {
+	public void setJuniorGardener(Gardener gardener) {
 		juniorGardener = gardener;
 	}
 
-	public void setSeniorGardener(Player gardener) {
+	public void setSeniorGardener(Gardener gardener) {
 		seniorGardener = gardener;
 	}
 
@@ -61,11 +62,11 @@ public class Turn {
 		this.status = status;
 	}
 
-	public Player getJuniorGardener() {
+	public Gardener getJuniorGardener() {
 		return juniorGardener;
 	}
 
-	public Player getSeniorGardener() {
+	public Gardener getSeniorGardener() {
 		return seniorGardener;
 	}
 

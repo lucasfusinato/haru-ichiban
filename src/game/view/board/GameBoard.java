@@ -1,16 +1,11 @@
 package game.view.board;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
@@ -24,7 +19,7 @@ import utils.view.DefaultTableIconCellRenderer;
 @SuppressWarnings("serial")
 public class GameBoard extends JTable {
 	
-	private final int SQUARE_SIZE = 100;
+	private final int SQUARE_SIZE;
 	private GameControllerInterface gameController;
 	private TableModel model;
 	private TableCellRenderer renderer;
@@ -32,14 +27,15 @@ public class GameBoard extends JTable {
 	private MouseMotionListener mouseMotionListener;
 	
 	public GameBoard(GameControllerInterface gameController) {
-		this.init(gameController);
-	}
-	
-	private void init(GameControllerInterface gameController) {
 		this.gameController = gameController;
-		this.defineProperties();
-		this.initComponents();
-		this.addComponents();
+		SQUARE_SIZE = calculateSquareSize();
+		init();
+	}
+
+	private void init() {
+		defineProperties();
+		initComponents();
+		addComponents();
 	}
 
 	private void defineProperties() {
@@ -53,23 +49,28 @@ public class GameBoard extends JTable {
 	
 	@Override
 	protected void paintComponent(Graphics g) {
-        g.setColor( getBackground() );
+        g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
 		super.paintComponent(g);
 	}
 
 	private void initComponents() {
-		this.model 				 = new GameBoardModel(this.gameController);
-		this.renderer 			 = new DefaultTableIconCellRenderer(this.SQUARE_SIZE);
-		this.mouseListener 		 = new GameBoardMouseListener(this.gameController);
-		this.mouseMotionListener = new GameBoardMouseMotionListener(this, this.gameController);
+		model 				= new GameBoardModel(gameController);
+		renderer 			= new DefaultTableIconCellRenderer(SQUARE_SIZE);
+		mouseListener 		= new GameBoardMouseListener(gameController);
+		mouseMotionListener = new GameBoardMouseMotionListener(this, gameController);
 	}
 
 	private void addComponents() {
-		this.setModel(this.model);
-		this.setDefaultRenderer(Object.class, this.renderer);
-		this.addMouseListener(this.mouseListener);
-		this.addMouseMotionListener(this.mouseMotionListener);
+		setModel(model);
+		setDefaultRenderer(Object.class, renderer);
+		addMouseListener(mouseListener);
+		addMouseMotionListener(mouseMotionListener);
+	}
+	
+	private int calculateSquareSize() {
+		final int maximo = 500;
+		return (int) (maximo / gameController.getBoardRowCount());
 	}
 
 }

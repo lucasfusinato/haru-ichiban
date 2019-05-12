@@ -1,6 +1,6 @@
 package game.model;
 
-public enum Direction {
+public enum Direction implements Element {
 	
 	UP("arrow-up"),
 	DOWN("arrow-down"),
@@ -12,9 +12,10 @@ public enum Direction {
 	private Direction(String description) {
 		this.description = description;
 	}
-	
+
+	@Override
 	public String getDescription() {
 		return description;
 	}
-
+	
 }

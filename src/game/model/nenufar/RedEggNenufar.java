@@ -1,12 +1,13 @@
 package game.model.nenufar;
 
-import game.model.frog.RedFrog;
+import game.model.factory.AbstractGardenerFactory;
+import game.model.factory.RedGardenerFactory;
 
-public class RedFrogNenufar extends LightedNenufar {
+public class RedEggNenufar extends EggNenufar {
 
-	public RedFrogNenufar() {
-		super();
-		setElement(new RedFrog());
+	@Override
+	protected AbstractGardenerFactory getGardenerFactory() {
+		return RedGardenerFactory.getInstance();
 	}
 	
 }

@@ -4,39 +4,36 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import game.controller.builder.NenufarBoardBuilder;
-import game.controller.builder.NenufarBoardDirector;
-import game.controller.builder.StartNenufarBoardBuilder;
 import game.controller.exception.InvallidMoveException;
 import game.controller.exception.InvallidMoveTimeException;
 import game.model.Direction;
 import game.model.Game;
 import game.model.TurnStatus;
-import game.model.NenufarBoard;
-import game.model.Player;
+import game.model.board.Board;
+import game.model.board.Square;
+import game.model.builder.game.GameBuilder;
+import game.model.builder.game.GameBuilderHashMap;
+import game.model.builder.game.GameDirector;
 import game.model.Round;
-import game.model.Square;
 import game.model.Turn;
 import game.model.factory.AbstractGardenerFactory;
 import game.model.factory.RedGardenerFactory;
 import game.model.factory.YellowGardenerFactory;
 import game.model.flower.Flower;
+import game.model.gardener.Gardener;
 import game.model.gardener.GardenerColor;
 import game.model.nenufar.Nenufar;
 import game.model.nenufar.NenufarSide;
 import game.model.nenufar.LightedNenufar;
-import utils.Director;
 
 public class GameController implements GameControllerInterface {
 	
-	private static final int AVAILABLE_FLOWER_QUANTITY = 3;
-	private static final int TURNS_PER_ROUND = 8;
+	private static final int AVAILABLE_SELECT_FLOWERS = 3;
 	private static GameController instance;
 	private List<GameControllerObserver> observers;
-	private List<Game> games;
-	private Game currentGame;
+	private Game<Nenufar> currentGame;
 	private Round currentRound;
-	private NenufarBoard currentBoard;
+	private Board<Nenufar> currentBoard;
 	private Turn currentTurn;
 	private Square<Nenufar> selectedSquare;
 	private Flower visibleRedFlowerNumber;
@@ -50,14 +47,14 @@ public class GameController implements GameControllerInterface {
 	}
 
 	private GameController() {
-		observers = new ArrayList<>();
-		games = new ArrayList<>();
-		currentGame = null;
-		currentRound = null;
-		currentBoard = null;
-		currentTurn = null;
-		visibleRedFlowerNumber = null;
-		visibleYellowFlowerNumber = null;
+		observers 					= new ArrayList<>();
+		currentGame 				= null;
+		currentRound 				= null;
+		currentBoard 				= null;
+		currentTurn 				= null;
+		selectedSquare 				= null;
+		visibleRedFlowerNumber 		= null;
+		visibleYellowFlowerNumber 	= null;
 	}
 
 	@Override
@@ -66,12 +63,12 @@ public class GameController implements GameControllerInterface {
 	}
 	
 	@Override
-	public void startGame(Player red, Player yellow) {
-		currentGame = new Game(red, yellow);
-		games.add(currentGame);
+	public void startGame(String redGardener, String yellowGardener, int gameType) {
+		currentGame  = createGame(redGardener, yellowGardener, gameType);
+		currentBoard = currentGame.getBoard();
 		goToNextRound();
 	}
-	
+
 	@Override
 	public void selectRedFlower(int index) throws InvallidMoveTimeException {
 		if(canSelectRedFlower()) {
@@ -193,12 +190,12 @@ public class GameController implements GameControllerInterface {
 
 	@Override
 	public int getAvailableRedFlowerQuantity() {
-		return AVAILABLE_FLOWER_QUANTITY;
+		return AVAILABLE_SELECT_FLOWERS;
 	}
 
 	@Override
 	public int getAvailableYellowFlowerQuantity() {
-		return AVAILABLE_FLOWER_QUANTITY;
+		return AVAILABLE_SELECT_FLOWERS;
 	}
 
 	@Override
@@ -403,25 +400,36 @@ public class GameController implements GameControllerInterface {
 	public boolean isSelectedRedFlower(int rowIndex) {
 		return currentTurn.getSelectedRedFlower() == currentTurn.getRedFlower(rowIndex);
 	}
+
+	private Game<Nenufar> createGame(String redPlayer, String yellowPlayer, int gameType) {
+		GameBuilderHashMap 	  games    = GameBuilderHashMap.getInstance();
+		GameBuilder<Nenufar>  builder  = games.get(gameType);
+		GameDirector<Nenufar> director = new GameDirector<>(builder);
+		director.construct(redPlayer, yellowPlayer);
+		return builder.getGame();
+	}
 	
 	private boolean canWithdrawRedFlowerAt(int index, boolean checkStatus) {
-		return (!checkStatus || isWithdrawFlowerStatus()) && currentTurn.getRedFlowers().size() <= index && TURNS_PER_ROUND - currentRound.getTurns().size() > index;
+		return canWithdrawFlowerAt(index, currentTurn.getRedFlowers(), checkStatus);
 	}
 	
 	private boolean canWithdrawYellowFlowerAt(int index, boolean checkStatus) {
-		return (!checkStatus || isWithdrawFlowerStatus()) && currentTurn.getYellowFlowers().size() <= index && TURNS_PER_ROUND - currentRound.getTurns().size() > index;
+		return canWithdrawFlowerAt(index, currentTurn.getYellowFlowers(), checkStatus);
+	}
+
+	private boolean canWithdrawFlowerAt(int index, List<Flower> scope, boolean checkStatus) {
+		return (!checkStatus || isWithdrawFlowerStatus()) && scope.size() <= index && currentGame.getRoundQuantity() - currentRound.getTurns().size() > index;
 	}
 
 	private void goToNextRound() {
-		currentBoard = createStartBoard();
-		currentRound = createRound(currentBoard);
+		currentRound = createRound();
 		currentGame.addRound(currentRound);
 		notifyUpdatedBoard();
 		goToNextTurn();
 	}
 
-	private Round createRound(NenufarBoard board) {
-		return new Round(board, createRoundRedFlowers(), createRoundYellowFlowers());
+	private Round createRound() {
+		return new Round(createRoundRedFlowers(), createRoundYellowFlowers());
 	}
 
 	private List<Flower> createRoundRedFlowers() {
@@ -434,7 +442,8 @@ public class GameController implements GameControllerInterface {
 
 	private List<Flower> createRoundFlowers(AbstractGardenerFactory factory) {
 		List<Flower> flowers = new ArrayList<>();
-		for(int i = 1; i <= TURNS_PER_ROUND; i++) {
+		int rounds = currentGame.getRoundQuantity();
+		for(int i = 1; i <= rounds; i++) {
 			flowers.add(factory.createFlower(i));
 		}
 		Collections.shuffle(flowers);
@@ -539,11 +548,11 @@ public class GameController implements GameControllerInterface {
 	}
 
 	private boolean withdrawedRedFlowers() {
-		return currentTurn.getRedFlowers().size() == AVAILABLE_FLOWER_QUANTITY;
+		return currentTurn.getRedFlowers().size() == AVAILABLE_SELECT_FLOWERS;
 	}
 
 	private boolean withdrawedYellowFlowers() {
-		return currentTurn.getYellowFlowers().size() == AVAILABLE_FLOWER_QUANTITY;
+		return currentTurn.getYellowFlowers().size() == AVAILABLE_SELECT_FLOWERS;
 	}
 
 	private boolean canMoveJuniorGardenerFlowerToSquare(int row, int column) {
@@ -690,13 +699,6 @@ public class GameController implements GameControllerInterface {
 		notifyUpdatedBoard();
 	}
 	
-	private NenufarBoard createStartBoard() {
-		NenufarBoardBuilder builder = new StartNenufarBoardBuilder();
-		Director director = new NenufarBoardDirector(builder);
-		director.construct();
-		return builder.getObject();
-	}
-
 	private boolean hasCurrentGame() {
 		return currentGame != null;
 	}
@@ -719,7 +721,7 @@ public class GameController implements GameControllerInterface {
 		return hasCurrentGame() && currentTurn.hasSelectedRedFlower() && currentTurn.hasSelectedYellowFlower();
 	}
 
-	private void defineGardeners(Player seniorGardener, Player yellowGardener) {
+	private void defineGardeners(Gardener seniorGardener, Gardener yellowGardener) {
 		currentTurn.setSeniorGardener(seniorGardener);
 		currentTurn.setJuniorGardener(yellowGardener);
 		hideRedFlowerNumber();

@@ -2,14 +2,13 @@ package game.controller;
 
 import game.controller.exception.InvallidMoveException;
 import game.controller.exception.InvallidMoveTimeException;
-import game.model.Player;
 import game.model.TurnStatus;
 
 public interface GameControllerInterface {
 
 	void attach(GameControllerObserver observer);
 
-	void startGame(Player red, Player yellow);
+	void startGame(String redPlayer, String yellowPlayer, int configuration);
 
 	void selectRedFlower(int index) throws InvallidMoveTimeException;
 

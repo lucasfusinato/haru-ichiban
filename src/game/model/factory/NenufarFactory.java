@@ -2,8 +2,6 @@ package game.model.factory;
 
 import game.model.nenufar.DarkenedNenufar;
 import game.model.nenufar.LightedNenufar;
-import game.model.nenufar.RedFrogNenufar;
-import game.model.nenufar.YellowFrogNenufar;
 
 public class NenufarFactory {
 
@@ -22,14 +20,6 @@ public class NenufarFactory {
 
 	public DarkenedNenufar createDarkenedNenufar() {
 		return new DarkenedNenufar();
-	}
-
-	public YellowFrogNenufar createYellowFrogNenufar() {
-		return new YellowFrogNenufar();
-	}
-
-	public RedFrogNenufar createRedFrogNenufar() {
-		return new RedFrogNenufar();
 	}
 
 }

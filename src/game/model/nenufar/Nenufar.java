@@ -23,7 +23,7 @@ public abstract class Nenufar implements Element {
 	
 	private void defineRotation() {
 		Random random = new Random();
-		rotation = random.nextInt(360);
+		rotation = random.nextInt(360); //TODO unused
 	}
 
 	public void activeTopSide() {

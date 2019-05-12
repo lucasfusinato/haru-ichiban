@@ -28,7 +28,7 @@ public abstract class AbstractFlowerWithdrawDialog extends JDialog {
 	}
 
 	private void init() {
-		setSize(900, 200);
+		setSize(900, 250);
 		setLocationRelativeTo(null);
 		setTitle("Saque de flor");
 		setAlwaysOnTop(true);

@@ -1,6 +1,8 @@
 package game.model.nenufar;
 
-public enum NenufarSide {
+import game.model.Element;
+
+public enum NenufarSide implements Element {
 
 	LIGHTED("lighted-nenufar"),
 	DARKENED("darkened-nenufar");
@@ -11,6 +13,7 @@ public enum NenufarSide {
 		this.description = description;
 	}
 		
+	@Override
 	public String getDescription() {
 		return description;
 	}

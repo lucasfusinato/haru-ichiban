@@ -7,19 +7,14 @@ import game.model.flower.Flower;
 
 public class Round {
 	
-	private NenufarBoard board;
 	private List<Turn> turns;
 	private List<Flower> redFlowers;
 	private List<Flower> yellowFlowers;
 	private List<Flower> withdrawRedFlowers;
 	private List<Flower> withdrawYellowFlowers;
 	
-	public Round() {
-	}
-
-	public Round(NenufarBoard board, List<Flower> redFlowers, List<Flower> yellowFlowers) {
+	public Round(List<Flower> redFlowers, List<Flower> yellowFlowers) {
 		this.turns = new ArrayList<>();
-		this.board = board;
 		this.redFlowers = redFlowers;
 		this.yellowFlowers = yellowFlowers;
 		this.withdrawRedFlowers = redFlowers;
@@ -32,16 +27,6 @@ public class Round {
 
 	public void removeTurn(Turn turn) {
 		turns.remove(turn);
-	}
-
-	public void removeFlower(Flower flower) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean recheadTurnLimit() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public Flower getYellowFlower(int index) {

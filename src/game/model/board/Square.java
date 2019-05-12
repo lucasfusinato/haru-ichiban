@@ -1,4 +1,4 @@
-package game.model;
+package game.model.board;
 
 public class Square<E> {
 	

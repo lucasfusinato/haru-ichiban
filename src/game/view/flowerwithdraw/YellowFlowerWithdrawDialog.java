@@ -26,19 +26,23 @@ public class YellowFlowerWithdrawDialog extends AbstractFlowerWithdrawDialog {
 				return new AbstractTableModel() {
 					@Override
 					public String getValueAt(int rowIndex, int columnIndex) {
-						if(gameController.hasWithdrawYellowFlowerAt(columnIndex)) {
-							return ViewUtils.createImagePath(gameController.getWithdrawYellowFlowerAt(columnIndex) + "-" + gameController.getWithdrawYellowFlowerNumberAt(columnIndex));
+						int index = columnIndex + (getColumnCount() * rowIndex);
+						if(gameController.hasWithdrawYellowFlowerAt(index)) {
+							return ViewUtils.createImagePath(gameController.getWithdrawYellowFlowerAt(index) + "-" + gameController.getWithdrawYellowFlowerNumberAt(index));
 						} else {
 							return null;
 						}
 					}
 					@Override
 					public int getRowCount() {
-						return 1;
+						int flowers = gameController.getWithdrawYellowFlowerQuantity();
+						int divisor = (int) (flowers / 10);
+						return divisor + 1;
 					}
 					@Override
 					public int getColumnCount() {
-						return gameController.getWithdrawYellowFlowerQuantity();
+						int flowers = gameController.getWithdrawYellowFlowerQuantity();
+						return (int) (flowers / getRowCount());
 					}
 				};
 			}

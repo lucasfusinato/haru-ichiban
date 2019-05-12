@@ -1,15 +1,12 @@
 import java.beans.PropertyVetoException;
 
 import javax.swing.JDesktopPane;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import game.controller.GameController;
 import game.controller.GameControllerInterface;
-import game.model.Player;
-import game.model.gardener.GardenerColor;
 import game.view.GameInternalFrame;
 import game.view.ViewUtils;
 
@@ -28,7 +25,7 @@ public class Main implements Runnable {
 		framePrincipal.setLocationRelativeTo(null);
 		JDesktopPane desktopPane = new JDesktopPane();
 		GameControllerInterface gameController = GameController.getInstance();
-		gameController.startGame(new Player("Lucas", GardenerColor.RED), new Player("João", GardenerColor.YELLOW));
+		gameController.startGame("Lucas", "João", 2);
 		JInternalFrame gameInternalFrame = new GameInternalFrame(gameController);
 		gameInternalFrame.setBorder(null);
 		((BasicInternalFrameUI) gameInternalFrame.getUI()).setNorthPane(null);

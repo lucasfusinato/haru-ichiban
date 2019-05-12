@@ -1,13 +1,13 @@
-package game.model;
+package game.model.board;
 
 import game.model.nenufar.Nenufar;
 
-public class NenufarBoard extends Board<Nenufar> {
+public class NormalNenufarBoard extends Board<Nenufar> {
 
-	private final static int ROWS = 5;
-	private final static int COLS = 5;
+	public final static int ROWS = 5;
+	public final static int COLS = 5;
 	
-	public NenufarBoard() {
+	public NormalNenufarBoard() {
 		super(ROWS, COLS);
 	}
 

@@ -26,8 +26,9 @@ public class RedFlowerWithdrawDialog extends AbstractFlowerWithdrawDialog {
 				return new AbstractTableModel() {
 					@Override
 					public String getValueAt(int rowIndex, int columnIndex) {
-						if(gameController.hasWithdrawRedFlowerAt(columnIndex)) {
-							return ViewUtils.createImagePath(gameController.getWithdrawRedFlowerAt(columnIndex) + "-" + gameController.getWithdrawRedFlowerNumberAt(columnIndex));
+						int index = columnIndex * (rowIndex + 1);
+						if(gameController.hasWithdrawRedFlowerAt(index)) {
+							return ViewUtils.createImagePath(gameController.getWithdrawRedFlowerAt(index) + "-" + gameController.getWithdrawRedFlowerNumberAt(index));
 						} else {
 							return null;
 						}
