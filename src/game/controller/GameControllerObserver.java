@@ -2,12 +2,26 @@ package game.controller;
 
 public interface GameControllerObserver {
 
-	void gameWasBeStarted();
+	void updateRedFlowers();
 
-	void redFlowerWasBeSelected(int number);
+	void updateYellowFlowers();
 
-	void yellowFlowerWasBeSelected(int number);
+	void updateGardeners(String seniorGardener, String juniorGardener);
 
-	void updateGameBoard();
+	void updateStatus(String status);
+
+	void updateBoard();
+
+	void requestRedFlowerWithdraw();
+
+	void requestYellowFlowerWithdraw();
+
+	void updateWithdrawRedFlowers();
+
+	void updateWithdrawYellowFlowers();
+
+	void withdrawedRedFlowers();
+
+	void withdrawedYellowFlowers();
 
 }

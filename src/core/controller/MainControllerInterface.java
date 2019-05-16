@@ -1,23 +1,32 @@
 package core.controller;
 
-import game.controller.GameControllerInterface;
+import java.util.List;
 
 public interface MainControllerInterface {
 
 	void attach(MainControllerObserver observer);
 
-	void selectMenuOption(MainMenuOption mainMenuOption);
+	void detach(MainControllerObserver observer);
+
+	void startNewGame();
 
 	void exitSystem();
 
-	void showSystemInformation();
-
-	void startNewGame();
+	void startGame();
+	
+	void definePlayer1(String playerName);
+	
+	void definePlayer2(String playerName);
+	
+	void defineLevel(Integer level);
+	
+	void showGameInformation();
 	
 	String getSystemTitle();
 
-	Object getSystemInformation();
+	String getSystemInformation();
 
-	GameControllerInterface getGameController();
+	List<String> getLevelOptions();
+
 
 }

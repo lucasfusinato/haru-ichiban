@@ -1,17 +1,17 @@
 
-import core.view.MainView;
+import core.view.MainFrame;
 
 public class Main implements Runnable {
 
 	public static void main(String[] args) {
-		Thread thread = new Thread(new Main());
+		Main main = new Main();
+		Thread thread = new Thread(main);
 		thread.start();
 	}
 
 	@Override
 	public void run() {
-		MainView view = new MainView();
-		view.setVisible(true);
+		MainFrame.getInstance().setVisible(true);
 	}
 	
 }

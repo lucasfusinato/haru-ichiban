@@ -1,22 +1,19 @@
 package core.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import core.controller.command.AboutCommand;
-import core.controller.command.ExitCommand;
-import core.controller.command.NewGameCommand;
 import game.controller.GameController;
 import game.controller.GameControllerInterface;
-import utils.Command;
+import game.model.GameType;
 
 public class MainController implements MainControllerInterface {
 	
 	private static MainController instance;
 	private List<MainControllerObserver> observers;
-	private HashMap<MainMenuOption, Command> mainMenuCommands;
-	private GameControllerInterface gameController;
+	private String player1;
+	private String player2;
+	private Integer level;
 	
 	public static MainControllerInterface getInstance() {
 		if(instance == null) {
@@ -26,20 +23,7 @@ public class MainController implements MainControllerInterface {
 	}
 	
 	private MainController() {
-		this.init();
-	}
-
-	private void init() {
-		this.gameController	  = GameController.getInstance();
-		this.observers 		  = new ArrayList<>();
-		this.mainMenuCommands = new HashMap<>();
-		this.defineMainMenuCommands();
-	}
-
-	private void defineMainMenuCommands() {
-		this.mainMenuCommands.put(MainMenuOption.NEW_GAME, 	new NewGameCommand(this));
-		this.mainMenuCommands.put(MainMenuOption.ABOUT, 	new AboutCommand(this));
-		this.mainMenuCommands.put(MainMenuOption.EXIT, 		new ExitCommand(this));
+		observers = new ArrayList<>();
 	}
 
 	@Override
@@ -48,46 +32,52 @@ public class MainController implements MainControllerInterface {
 	}
 
 	@Override
-	public void selectMenuOption(MainMenuOption mainMenuOption) {
-		Command mainMenuCommand = this.mainMenuCommands.get(mainMenuOption);
-		if(mainMenuCommand != null) {
-			mainMenuCommand.execute();
-		}
+	public void detach(MainControllerObserver observer) {
+		this.observers.remove(observer);
+	}
+	
+	@Override
+	public void startNewGame() {
+		definePlayer1(null);
+		definePlayer2(null);
+		defineLevel(0);
+		requestGameInformation();
+	}
+
+	@Override
+	public void startGame() {
+		GameControllerInterface gameController = new GameController();
+		gameController.startGame(player1, player2, level);
+		notifyGameStarted(gameController);
 	}
 
 	@Override
 	public void exitSystem() {
-		this.notifySystemWillBeClosed();
+		notifySystemWillBeClosed();
 		System.exit(0);
 	}
 
 	@Override
-	public void showSystemInformation() {
-		this.notifyShowSystemInformation();
+	public void definePlayer1(String playerName) {
+		this.player1 = playerName;
+		notifyUpdatedPlayer1();
 	}
 
 	@Override
-	public void startNewGame() {
-		this.notifyGameWillBeStarted();
-		this.gameController.startGame();
+	public void definePlayer2(String playerName) {
+		this.player2 = playerName;
+		notifyUpdatedPlayer2();
 	}
 
-	protected void notifySystemWillBeClosed() {
-		for(MainControllerObserver observer : this.observers) {
-			observer.systemWillBeClosed();
-		}
+	@Override
+	public void defineLevel(Integer level) {
+		this.level = level;
+		notifyUpdatedLevel();
 	}
 
-	protected void notifyShowSystemInformation() {
-		for(MainControllerObserver observer : this.observers) {
-			observer.showSystemInformation();
-		}
-	}
-
-	protected void notifyGameWillBeStarted() {
-		for(MainControllerObserver observer : this.observers) {
-			observer.gameWillBeStarted();
-		}
+	@Override
+	public void showGameInformation() {
+		notifyShowGameInformation();
 	}
 
 	@Override
@@ -97,12 +87,59 @@ public class MainController implements MainControllerInterface {
 
 	@Override
 	public String getSystemInformation() {
-		return "Desenvolvido por Lucas Fusinato Wilhelm Chiodini Zanis e João Victor Arruda";
+		return "Desenvolvido por Lucas Zanis e João Arruda.";
 	}
 
 	@Override
-	public GameControllerInterface getGameController() {
-		return this.gameController;
+	public List<String> getLevelOptions() {
+		List<String> options = new ArrayList<>();
+		for(GameType type : GameType.values()) {
+			options.add(type.getDescription());
+		}
+		return options;
+	}
+
+	protected void notifyUpdatedPlayer1() {
+		for(MainControllerObserver observer : this.observers) {
+			observer.updatePlayer1(player1);
+		}
+	}
+
+	protected void notifyUpdatedPlayer2() {
+		for(MainControllerObserver observer : this.observers) {
+			observer.updatePlayer2(player2);
+		}
+	}
+
+	protected void notifyUpdatedLevel() {
+		for(MainControllerObserver observer : this.observers) {
+			observer.updateLevel(level);
+		}
+	}
+
+	protected void requestGameInformation() {
+		for(MainControllerObserver observer : this.observers) {
+			observer.requestGameInformation();
+		}
+	}
+
+	private void notifyShowGameInformation() {
+		String gameInformation = getSystemInformation();
+		for(MainControllerObserver observer : this.observers) {
+			observer.showGameInformation(gameInformation);
+		}
+	}
+
+	protected void notifySystemWillBeClosed() {
+		for(MainControllerObserver observer : this.observers) {
+			observer.systemWillBeClosed();
+		}
+	}
+
+	protected void notifyGameStarted(GameControllerInterface gameController) {
+		for(MainControllerObserver observer : this.observers) {
+			observer.gameStarted(gameController);
+		}
 	}
 
 }
