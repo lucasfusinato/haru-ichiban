@@ -15,7 +15,8 @@ public abstract class NenufarBoardBuilder extends BoardBuilder<Nenufar> {
 		int cols = board.getCols();
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < cols; j++) {
-				board.setElementAtSquare(defineElementAtSquare(i, j), i, j);
+				Nenufar element = defineElementAtSquare(i, j);
+				board.setElementAtSquare(element, i, j);
 			}
 		}
 	}
@@ -38,7 +39,7 @@ public abstract class NenufarBoardBuilder extends BoardBuilder<Nenufar> {
 	private boolean isStartDarkenedNenufarSquare(int i, int j) {
 		int linha  = ((int) (board.getRows() / 2)) + 1;
 		int coluna = ((int) (board.getCols() / 2)) + 1;
-		return i == coluna && j == linha;
+		return i == linha && j == coluna;
 	}
 
 	private boolean isStartLightedNenufarSquare(int i, int j) {
@@ -56,15 +57,15 @@ public abstract class NenufarBoardBuilder extends BoardBuilder<Nenufar> {
 	}
 
 	private boolean isStartRedFrogNenufarSquare(int i, int j) {
-		int linha  = ((int) (board.getRows() / 2)) + 1;
-		int coluna = ((int) (board.getCols() / 2)) - 1;
-		return i == coluna && j == linha;
+		int linha = ((int) (board.getCols() / 2)) + 1;
+		int coluna  = ((int) (board.getRows() / 2)) - 1;
+		return i == linha && j == coluna;
 	}
 
 	private boolean isStartYellowFrogNenufarSquare(int i, int j) {
-		int linha  = ((int) (board.getRows() / 2));
-		int coluna = ((int) (board.getCols() / 2)) + 1;
-		return i == coluna && j == linha;
+		int linha = ((int) (board.getCols() / 2));
+		int coluna  = ((int) (board.getRows() / 2)) + 1;
+		return i == linha && j == coluna;
 	}
 
 }

@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import game.view.ViewUtils;
+import core.view.MainUtils;
 import utils.ClickEnterKeyListener;
 import utils.view.BackgroundPanel;
 
@@ -48,7 +48,7 @@ public class LevelSelectionInternalFrame extends JInternalFrame {
 	}
 
 	private void initComponents() {
-		backgroundPanel = new BackgroundPanel(ViewUtils.createImagePath("background-settings"));
+		backgroundPanel = new BackgroundPanel(MainUtils.createImagePath("background-settings"));
 		
 		radioPanel = new JPanel();
 		radioPanel.setOpaque(false);

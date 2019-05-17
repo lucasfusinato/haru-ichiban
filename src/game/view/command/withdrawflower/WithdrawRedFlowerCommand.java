@@ -1,7 +1,7 @@
 package game.view.command.withdrawflower;
 
+import core.view.MainUtils;
 import game.controller.GameControllerInterface;
-import game.view.ViewUtils;
 import utils.Command;
 
 public class WithdrawRedFlowerCommand implements Command {
@@ -19,7 +19,7 @@ public class WithdrawRedFlowerCommand implements Command {
 		try {
 			gameController.withdrawRedFlower(index);
 		} catch (Exception e) {
-			ViewUtils.catchException(e);
+			MainUtils.catchException(e);
 		}
 	}
 

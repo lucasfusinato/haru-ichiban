@@ -5,6 +5,7 @@ import game.view.command.board.JuniorGardenerFlowerSquareCommand;
 import game.view.command.board.JuniorGardenerHaruIchibanCommand;
 import game.view.command.board.SeniorGardenerDarkenedNenufarCommand;
 import game.view.command.board.SeniorGardenerFlowerSquareCommand;
+import game.view.command.board.SeniorGardenerFrogSquareCommand;
 import utils.Command;
 
 public class BoardMouseCommandFactory {
@@ -21,6 +22,8 @@ public class BoardMouseCommandFactory {
 				return new JuniorGardenerFlowerSquareCommand(gameController, rowIndex, columnIndex);
 			case SENIOR_GARDENER_FLOWER_SQUARE:
 				return new SeniorGardenerFlowerSquareCommand(gameController, rowIndex, columnIndex);
+			case SENIOR_GARDENER_FROG_SQUARE:
+				return new SeniorGardenerFrogSquareCommand(gameController, rowIndex, columnIndex);
 			case JUNIOR_GARDENER_HARU_ICHIBAN:
 				return new JuniorGardenerHaruIchibanCommand(gameController, rowIndex, columnIndex);
 			case SENIOR_GARDENER_DARKENED_NENUFAR:

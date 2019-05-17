@@ -1,7 +1,7 @@
 package game.view.command.selectflower;
 
+import core.view.MainUtils;
 import game.controller.GameControllerInterface;
-import game.view.ViewUtils;
 import utils.Command;
 
 public class SelectYellowFlowerCommand implements Command {
@@ -19,7 +19,7 @@ public class SelectYellowFlowerCommand implements Command {
 		try {
 			gameController.selectYellowFlower(index);
 		} catch (Exception e) {
-			ViewUtils.catchException(e);
+			MainUtils.catchException(e);
 		}
 	}
 

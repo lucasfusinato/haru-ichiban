@@ -2,8 +2,8 @@ package game.view.flowerselection;
 
 import javax.swing.table.AbstractTableModel;
 
+import core.view.MainUtils;
 import game.controller.GameControllerInterface;
-import game.view.ViewUtils;
 
 @SuppressWarnings("serial")
 public class YellowFlowerSelectionTableModel extends AbstractTableModel {
@@ -34,9 +34,9 @@ public class YellowFlowerSelectionTableModel extends AbstractTableModel {
 			} else if(gameController.hasSelectedYellowFlower() && !gameController.isSelectedYellowFlower(rowIndex)) {
 				value = "lighted-" + value;
 			}
-			value = ViewUtils.createImagePath(value);
+			value = MainUtils.createImagePath(value);
 		} else if(gameController.canWithdrawYellowFlowerAt(rowIndex)) {
-			value = ViewUtils.createImagePath("add-flower");
+			value = MainUtils.createImagePath("add-flower");
 		}
 		return value;
 	}

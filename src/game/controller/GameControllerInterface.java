@@ -104,4 +104,8 @@ public interface GameControllerInterface {
 	
 	boolean isSelectedRedFlower(int rowIndex);
 
+	int getRoundQuantity();
+
+	void defineSeniorGardenerFrogSquare(int row, int column) throws Exception;
+
 }

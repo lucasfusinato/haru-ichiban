@@ -15,14 +15,15 @@ import game.controller.GameControllerInterface;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame {
 
+	public static final int WIDTH = 1100;
+	public static final int HEIGHT = 600;
 	private JInternalFrame gameInternalFrame;
 	private GameControllerInterface gameController;
 	
 	public GameFrame(GameControllerInterface gameController) {
 		this.gameController = gameController;
-		ViewUtils.loadSources();
 		setResizable(false);
-		setSize(1100, 600);
+		setSize(WIDTH, HEIGHT);
 		setLocationRelativeTo(null);
 		setTitle("Haru ichiban");
 		JDesktopPane desktopPane = new JDesktopPane();

@@ -9,8 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
+import core.view.MainUtils;
 import core.view.frames.playerselection.PlayerSelectionPanel;
-import game.view.ViewUtils;
 import utils.ClickEnterKeyListener;
 import utils.NextFocusEnterKeyListener;
 import utils.view.BackgroundPanel;
@@ -40,7 +40,7 @@ public class PlayerSelectionInternalFrame extends JInternalFrame {
 	}
 
 	private void initComponents() {
-		backgroundPanel = new BackgroundPanel(ViewUtils.createImagePath("background-settings"));
+		backgroundPanel = new BackgroundPanel(MainUtils.createImagePath("background-settings"));
 		
 		player1Selection = new PlayerSelectionPanel(1, "Jardineiro Vermelho");
 		player1Selection.setOpaque(false);
@@ -90,11 +90,11 @@ public class PlayerSelectionInternalFrame extends JInternalFrame {
 	}
 
 	public String getPlayer1Name() {
-		return player1Selection.getName();
+		return player1Selection.getTfdName().getText();
 	}
 
 	public String getPlayer2Name() {
-		return player2Selection.getName();
+		return player2Selection.getTfdName().getText();
 	}
 	
 	@Override

@@ -27,7 +27,11 @@ public abstract class Nenufar implements Element {
 	}
 
 	public void activeTopSide() {
-		activeSide = topSide;
+		if(isFlowered()) {
+			activeSide = NenufarSide.LIGHTED;
+		} else {
+			activeSide = topSide;
+		}
 	}
 	
 	public void activeBottomSide() {

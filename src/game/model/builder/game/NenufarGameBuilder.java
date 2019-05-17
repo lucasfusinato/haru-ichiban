@@ -1,5 +1,6 @@
 package game.model.builder.game;
 
+import game.model.board.Board;
 import game.model.factory.RedGardenerFactory;
 import game.model.factory.YellowGardenerFactory;
 import game.model.nenufar.Nenufar;
@@ -8,8 +9,18 @@ public abstract class NenufarGameBuilder extends GameBuilder<Nenufar> {
 
 	@Override
 	public void defineRoundQuantity() {
-		int rounds = calculateGameRounds(getBoardRows(), getBoardCols());
-		getGame().setRoundQuantity(rounds);
+		Board<Nenufar> board = getGame().getBoard();
+		int rows = board.getRows();
+		int cols = board.getCols();
+		int count = 0;
+		for(int i = 0; i < rows; i++) {
+			for(int j = 0; j < cols; j++) {
+				if(board.getElementAtSquare(i, j) != null) {
+					count++;
+				}
+			}
+		}
+		getGame().setRoundQuantity((int) (count / 2));
 	}
 
 	@Override
@@ -25,9 +36,5 @@ public abstract class NenufarGameBuilder extends GameBuilder<Nenufar> {
 	protected abstract int getBoardRows();
 
 	protected abstract int getBoardCols();
-
-	private int calculateGameRounds(int boardRows, int boardCols) {
-		return (int) (((boardRows - 1) * (boardCols - 1)) / 2);
-	}
 
 }

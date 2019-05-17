@@ -36,19 +36,19 @@ public class GameComponentsPanel extends AbstractGameComponentsPanel {
 		GridBagConstraints cons;
 
 		//Adiciona o painel de pontuação (no topo)
-//		cons = new GridBagConstraints();
-//		cons.gridx = 0;
-//		cons.gridy = 0;
-//		cons.gridwidth = 5;
-//		cons.gridheight = 1;
-//		cons.anchor = GridBagConstraints.CENTER;
-//		cons.insets = defaultInsets;
-//		add(getScoreboardPanel(), cons);
+		cons = new GridBagConstraints();
+		cons.gridx = 0;
+		cons.gridy = 0;
+		cons.gridwidth = 5;
+		cons.gridheight = 1;
+		cons.anchor = GridBagConstraints.CENTER;
+		cons.insets = new Insets(-10, 0, 0, 0);
+		add(getScoreboardPanel(), cons);
 
 		//Adiciona o painel do tabuleiro (no centro)
 		cons = new GridBagConstraints();
 		cons.gridx = 0;
-		cons.gridy = 0;
+		cons.gridy = 1;
 		cons.gridwidth = 5;
 		cons.gridheight = 5;
 		cons.anchor = GridBagConstraints.CENTER;

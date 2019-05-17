@@ -12,8 +12,8 @@ public class GameDirector<E> {
 		builder.reset();
 		builder.definePlayer1(player1);
 		builder.definePlayer2(player2);
-		builder.defineRoundQuantity();
 		builder.constructBoard();
+		builder.defineRoundQuantity();
 	}
 	
 }

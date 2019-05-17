@@ -67,7 +67,7 @@ public class GameBoard extends JTable {
 	}
 	
 	private int calculateSquareSize() {
-		final int maximo = 500;
+		final int maximo = 450;
 		return (int) (maximo / gameController.getBoardRowCount());
 	}
 	

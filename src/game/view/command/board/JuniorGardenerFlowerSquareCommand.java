@@ -1,7 +1,7 @@
 package game.view.command.board;
 
+import core.view.MainUtils;
 import game.controller.GameControllerInterface;
-import game.view.ViewUtils;
 import utils.Command;
 
 public class JuniorGardenerFlowerSquareCommand implements Command {
@@ -21,7 +21,7 @@ public class JuniorGardenerFlowerSquareCommand implements Command {
 		try {
 			gameController.defineJuniorGardenerFlowerSquare(rowIndex, columnIndex);
 		} catch (Exception e) {
-			ViewUtils.catchException(e);
+			MainUtils.catchException(e);
 		}
 	}
 

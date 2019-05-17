@@ -10,7 +10,7 @@ import utils.view.DefaultTableIconCellRenderer;
 @SuppressWarnings("serial")
 public class ScoringTrackTable extends JTable {
 
-	private final int SQUARE_SIZE = 50;
+	private final int SQUARE_SIZE = 35;
 	private final int CENTRAL_COLUMN_SIZE = (int) (SQUARE_SIZE * 1.5);
 	private final int CENTRAL_COLUMN = 4;
 	private int[] points = {1, 2, 3, 4, 5, 4, 3, 2, 1};

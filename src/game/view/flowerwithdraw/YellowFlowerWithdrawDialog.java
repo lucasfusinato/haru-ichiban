@@ -4,8 +4,8 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
+import core.view.MainUtils;
 import game.controller.GameControllerInterface;
-import game.view.ViewUtils;
 import game.view.command.FlowerMouseCommandFactory;
 import game.view.command.withdrawflower.WithdrawYellowFlowerMouseCommandFactory;
 import game.view.flowerselection.AbstractFlowerSelectionTable;
@@ -26,23 +26,20 @@ public class YellowFlowerWithdrawDialog extends AbstractFlowerWithdrawDialog {
 				return new AbstractTableModel() {
 					@Override
 					public String getValueAt(int rowIndex, int columnIndex) {
-						int index = columnIndex + (getColumnCount() * rowIndex);
+						int index = YellowFlowerWithdrawDialog.this.getRowIndex(rowIndex, columnIndex);
 						if(gameController.hasWithdrawYellowFlowerAt(index)) {
-							return ViewUtils.createImagePath(gameController.getWithdrawYellowFlowerAt(index) + "-" + gameController.getWithdrawYellowFlowerNumberAt(index));
+							return MainUtils.createImagePath(gameController.getWithdrawYellowFlowerAt(index) + "-" + gameController.getWithdrawYellowFlowerNumberAt(index));
 						} else {
 							return null;
 						}
 					}
 					@Override
 					public int getRowCount() {
-						int flowers = gameController.getWithdrawYellowFlowerQuantity();
-						int divisor = (int) (flowers / 10);
-						return divisor + 1;
+						return YellowFlowerWithdrawDialog.this.getRowCount();
 					}
 					@Override
 					public int getColumnCount() {
-						int flowers = gameController.getWithdrawYellowFlowerQuantity();
-						return (int) (flowers / getRowCount());
+						return YellowFlowerWithdrawDialog.this.getColumnCount();
 					}
 				};
 			}

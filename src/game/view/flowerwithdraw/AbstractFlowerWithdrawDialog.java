@@ -17,18 +17,23 @@ import game.controller.GameControllerInterface;
 
 @SuppressWarnings("serial")
 public abstract class AbstractFlowerWithdrawDialog extends JDialog {
-
+	
+	private static final int MAXIMO_COLUNAS = 8;
+	private final int WIDTH;
+	private final int HEIGHT;
 	protected GameControllerInterface gameController;
 	private JPanel flowersPanel;
 	private JTable flowersTable;
 
 	public AbstractFlowerWithdrawDialog(GameControllerInterface gameController) {
 		this.gameController = gameController;
+		WIDTH = calculateWidth();
+		HEIGHT = calculateHeight();
 		init();
 	}
 
 	private void init() {
-		setSize(900, 250);
+		setSize(WIDTH, HEIGHT);
 		setLocationRelativeTo(null);
 		setTitle("Saque de flor");
 		setAlwaysOnTop(true);
@@ -91,5 +96,39 @@ public abstract class AbstractFlowerWithdrawDialog extends JDialog {
 	}
 
 	protected abstract JTable createFlowersTable();
+
+	private int calculateWidth() {
+		return (MAXIMO_COLUNAS + 1) * 100;
+	}
+
+	private int calculateHeight() {
+		int height = (calculateRows() + 1) * 100;
+		return height > 100 ? height : 200;
+	}
+	
+	private int calculateRows() {
+		if(gameController.getRoundQuantity() == MAXIMO_COLUNAS) {
+			return 1;
+		}
+		return 1 + ((int) Math.ceil(gameController.getRoundQuantity() / MAXIMO_COLUNAS));
+	}
+
+	protected int getRowIndex(int rowIndex, int columnIndex) {
+		return getColumnCount() * rowIndex + columnIndex;
+	}
+
+	protected int getRowCount() {
+		return calculateRows();
+	}
+
+	protected int getColumnCount() {
+		if(gameController.getRoundQuantity() == MAXIMO_COLUNAS) {
+			return MAXIMO_COLUNAS;
+		} else if(gameController.getRoundQuantity() == 14) {
+			return 7;
+		} else {
+			return 8;
+		}
+	}
 	
 }

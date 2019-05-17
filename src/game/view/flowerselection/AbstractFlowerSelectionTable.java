@@ -20,7 +20,7 @@ import utils.view.DefaultTableIconCellRenderer;
 @SuppressWarnings("serial")
 public abstract class AbstractFlowerSelectionTable extends JTable {
 
-	private final int SQUARE_SIZE = 100;
+	private static final int DEFAULT_SQUARE_SIZE = 100;
 	private GameControllerInterface gameController;
 	private TableCellRenderer cellRenderer;
 	private TableModel model;
@@ -47,7 +47,7 @@ public abstract class AbstractFlowerSelectionTable extends JTable {
 
 	private void defineProperties() {
 		setOpaque(false);
-		setRowHeight(this.SQUARE_SIZE);
+		setRowHeight(getSquareSize());
 		setBackground(new BlackTransparentColor());
 		Color gridColor = new Color(219, 159, 82);
 		setBorder(BorderFactory.createLineBorder(gridColor));
@@ -55,7 +55,7 @@ public abstract class AbstractFlowerSelectionTable extends JTable {
 	}
 
 	private void initComponents() {
-		this.cellRenderer 		 = new DefaultTableIconCellRenderer(this.SQUARE_SIZE);
+		this.cellRenderer 		 = new DefaultTableIconCellRenderer(getSquareSize());
 		this.model 				 = createTableModel();
 		this.mouseCommandFactory = createMouseCommandFactory();
 		this.mouseListener		 = new FlowerSelectionTableMouseListener(mouseCommandFactory, vertical);
@@ -82,6 +82,10 @@ public abstract class AbstractFlowerSelectionTable extends JTable {
 
 	public GameControllerInterface getGameController() {
 		return gameController;
+	}
+	
+	protected int getSquareSize() {
+		return DEFAULT_SQUARE_SIZE;
 	}
 	
 }
