@@ -5,14 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import game.model.Direction;
 import game.model.Game;
-import game.model.TurnStatus;
+import game.model.GameStatus;
 import game.model.board.Board;
 import game.model.board.Square;
-import game.model.builder.game.GameBuilder;
-import game.model.builder.game.GameBuilderHashMap;
-import game.model.builder.game.GameDirector;
 import game.model.Round;
 import game.model.Turn;
 import game.model.factory.AbstractGardenerFactory;
@@ -25,24 +21,11 @@ import game.model.frog.YellowFrog;
 import game.model.gardener.Gardener;
 import game.model.gardener.GardenerColor;
 import game.model.nenufar.Nenufar;
-import game.model.nenufar.NenufarSide;
 import game.model.visitor.BoardBloomPointsVisitor;
 import game.model.visitor.BoardRedBloomPoinstVisitor;
 import game.model.visitor.BoardYellowBloomPoinstVisitor;
-import game.model.nenufar.LightedNenufar;
-import game.controller.exception.InvallidDarkenedNenufarSquareException;
-import game.controller.exception.InvallidDefineDarkenedNenufarTimeException;
-import game.controller.exception.InvallidHaruIchibanTimeException;
-import game.controller.exception.InvallidJuniorGardenerFlowerSquareException;
-import game.controller.exception.InvallidJuniorGardenerFlowerTimeException;
-import game.controller.exception.InvallidRedFlowerTimeException;
-import game.controller.exception.InvallidRedWithdrawTimeException;
-import game.controller.exception.InvallidSeniorGardenerFlowerSquareException;
-import game.controller.exception.InvallidSeniorGardenerFlowerTimeException;
-import game.controller.exception.InvallidSeniorGardenerFrogSquareException;
-import game.controller.exception.InvallidSeniorGardenerFrogTimeException;
-import game.controller.exception.InvallidYellowFlowerTimeException;
-import game.controller.exception.InvallidYellowWithdrawTimeException;
+import game.controller.state.AbstractControllerState;
+import game.controller.state.UnitializedGame;
 
 public class GameController implements GameControllerInterface {
 	
@@ -56,13 +39,14 @@ public class GameController implements GameControllerInterface {
 	private Flower visibleRedFlowerNumber;
 	private Flower visibleYellowFlowerNumber;
 	private Frog currentFrog;
+	private AbstractControllerState state;
 
 	public GameController() {
-		observers = new ArrayList<>();
 		init();
 	}
 	
 	private void init() {
+		observers 					= new ArrayList<>();
 		game 						= null;
 		currentRound 				= null;
 		currentBoard 				= null;
@@ -71,6 +55,7 @@ public class GameController implements GameControllerInterface {
 		visibleRedFlowerNumber 		= null;
 		visibleYellowFlowerNumber 	= null;
 		currentFrog					= null;
+		setState(new UnitializedGame(this));
 	}
 
 	@Override
@@ -79,102 +64,43 @@ public class GameController implements GameControllerInterface {
 	}
 	
 	@Override
-	public void startGame(String redGardener, String yellowGardener, int gameType) {
-		game  = createGame(redGardener, yellowGardener, gameType);
-		currentBoard = game.getBoard();
-		goToNextRound();
+	public void startGame(String redGardener, String yellowGardener, int gameType) throws Exception {
+		state.startGame(redGardener, yellowGardener, gameType);
 	}
 
 	@Override
 	public void selectRedFlower(int index) throws Exception {
-		if(canSelectRedFlower()) {
-			Flower selectedFlower = currentTurn.getRedFlower(index);
-			currentTurn.setSelectedRedFlower(selectedFlower);
-			notifyUpdatedRedFlowers();
-			defineGardeners();
-		} else {
-			throw new InvallidRedFlowerTimeException();
-		}
+		state.selectRedFlower(index);
 	}
 	
 	@Override
 	public void selectYellowFlower(int index) throws Exception {
-		if(canSelectYellowFlower()) {
-			Flower selectedFlower = currentTurn.getYellowFlower(index);
-			currentTurn.setSelectedYellowFlower(selectedFlower);
-			notifyUpdatedYellowFlowers();
-			defineGardeners();
-		} else {
-			throw new InvallidYellowFlowerTimeException();
-		}
+		state.selectYellowFlower(index);
 	}
 
 	@Override
 	public void defineJuniorGardenerFlowerSquare(int row, int column) throws Exception {
-		if(canSelectJuniorGardenerFlowerSquare()) {
-			if(canMoveJuniorGardenerFlowerToSquare(row, column)) {
-				moveJuniorGardenerFlowerToSquare(row, column);
-				goToNextStep();
-			} else {
-				throw new InvallidJuniorGardenerFlowerSquareException();
-			}
-		} else {
-			throw new InvallidJuniorGardenerFlowerTimeException();
-		}
+		state.defineJuniorGardenerFlowerSquare(row, column);
 	}
 
 	@Override
 	public void defineSeniorGardenerFlowerSquare(int row, int column) throws Exception {
-		if(canSelectSeniorGardenerFlowerSquare()) {
-			if(canMoveSeniorGardenerFlowerToSquare(row, column)) {
-				moveSeniorGardenerFlowerToSquare(row, column);
-			} else {
-				throw new InvallidSeniorGardenerFlowerSquareException();
-			}
-		} else {
-			throw new InvallidSeniorGardenerFlowerTimeException();
-		}
+		state.defineSeniorGardenerFlowerSquare(row, column);
 	}
 
 	@Override
 	public void defineSeniorGardenerFrogSquare(int row, int column) throws Exception {
-		if(canDefineSeniorGardenerFrogSquare()) {
-			if(canMoveSeniorGardenerFrogToSquare(row, column)) {
-				moveSeniorGardenerFrogToSquare(row, column);
-				goToNextStep();
-			} else {
-				throw new InvallidSeniorGardenerFrogSquareException();
-			}
-		} else {
-			throw new InvallidSeniorGardenerFrogTimeException();
-		}
+		state.defineSeniorGardenerFrogSquare(row, column);
 	}
 
 	@Override
 	public void executeHaruIchiban(int row, int column) throws Exception {
-		if(canExecuteHaruIchiban()) {
-			if(hasSelectedSquareToHaruIchiban()) {
-				callHaruIchiban(row, column);
-			} else {
-				selectSquareToHaruIchiban(row, column);
-			}
-		} else {
-			throw new InvallidHaruIchibanTimeException();
-		}
+		state.executeHaruIchiban(row, column);
 	}
 	
 	@Override
 	public void defineDarkenedNenufar(int row, int column) throws Exception {
-		if(canDefineDarkenedNenufar()) {
-			if(canDefineDarkenedNenufarToSquare(row, column)) {
-				defineDarkenedNenufarToSquare(row, column);
-				goToNextStep();
-			} else {
-				throw new InvallidDarkenedNenufarSquareException();
-			}
-		} else {
-			throw new InvallidDefineDarkenedNenufarTimeException();
-		}
+		state.defineDarkenedNenufar(row, column);
 	}
 
 	@Override
@@ -209,12 +135,12 @@ public class GameController implements GameControllerInterface {
 
 	@Override
 	public boolean hasBoardInfoAt(int rowIndex, int columnIndex) {
-		return hasCurrentGame() && isCurrentTurnStatus(TurnStatus.JUNIOR_GARDENER_HARU_ICHIBAN) && getHaruIchibanDirection(rowIndex, columnIndex) != null;
+		return state.hasBoardInfoAt(rowIndex, columnIndex);
 	}
 
 	@Override
 	public String getBoardInfoAt(int rowIndex, int columnIndex) {
-		return getHaruIchibanDirection(rowIndex, columnIndex).getDescription();
+		return state.getBoardInfoAt(rowIndex, columnIndex);
 	}
 
 	@Override
@@ -343,43 +269,17 @@ public class GameController implements GameControllerInterface {
 
 	@Override
 	public void withdrawRedFlower(int index) throws Exception {
-		if(isWithdrawFlowerStatus()) {
-			Flower flower = currentRound.removeWithdrawRedFlower(index);
-			currentTurn.addRedFlower(flower);
-			notifyUpdatedRedFlowers();
-			notifyUpdatedWithdrawRedFlowers();
-			if(withdrawedRedFlowers()) {
-				notifyWithdrawedRedFlowers();
-				if(withdrawedYellowFlowers()) {
-					goToNextStep();
-				}
-			}
-		} else {
-			throw new InvallidRedWithdrawTimeException();
-		}
+		state.withdrawRedFlower(index);
 	}
 
 	@Override
 	public void withdrawYellowFlowerAt(int index) throws Exception {
-		if(isWithdrawFlowerStatus()) {
-			Flower flower = currentRound.removeWithdrawYellowFlower(index);
-			currentTurn.addYellowFlower(flower);
-			notifyUpdatedYellowFlowers();
-			notifyUpdatedWithdrawYellowFlowers();
-			if(withdrawedYellowFlowers()) {
-				notifyWithdrawedYellowFlowers();
-				if(withdrawedRedFlowers()) {
-					goToNextStep();
-				}
-			}
-		} else {
-			throw new InvallidYellowWithdrawTimeException();
-		}
+		state.withdrawYellowFlower(index);
 	}
 
 	@Override
-	public TurnStatus getTurnStatus() {
-		return currentTurn.getStatus();
+	public GameStatus getTurnStatus() {
+		return state.getStatus();
 	}
 
 	@Override
@@ -435,14 +335,6 @@ public class GameController implements GameControllerInterface {
 		return game.getRoundQuantity();
 	}
 
-	private Game<Nenufar> createGame(String redPlayer, String yellowPlayer, int gameType) {
-		GameBuilderHashMap 	  games    = GameBuilderHashMap.getInstance();
-		GameBuilder<Nenufar>  builder  = games.get(gameType);
-		GameDirector<Nenufar> director = new GameDirector<>(builder);
-		director.construct(redPlayer, yellowPlayer);
-		return builder.getGame();
-	}
-	
 	private boolean canWithdrawRedFlowerAt(int index, boolean checkStatus) {
 		return canWithdrawFlowerAt(index, currentTurn.getRedFlowers(), checkStatus);
 	}
@@ -453,15 +345,6 @@ public class GameController implements GameControllerInterface {
 
 	private boolean canWithdrawFlowerAt(int index, List<Flower> scope, boolean checkStatus) {
 		return (!checkStatus || isWithdrawFlowerStatus()) && scope.size() <= index && game.getRoundQuantity() - currentRound.getTurns().size() > index;
-	}
-
-	private void goToNextRound() {
-		currentRound = createRound();
-		game.addRound(currentRound);
-		clearBoard();
-		notifyStartedRound();
-		currentTurn = null;
-		goToNextTurn();
 	}
 
 	private void clearBoard() {
@@ -533,9 +416,9 @@ public class GameController implements GameControllerInterface {
 
 	private void defineInitialTurnStatus() {
 		if(canWithdrawRedFlower() || canWithdrawYellowFlower()) {
-			updateTurnStatus(TurnStatus.WITHDRAW_FLOWER);
+			updateTurnStatus(GameStatus.WITHDRAW_FLOWER);
 		} else {
-			updateTurnStatus(TurnStatus.FLOWER_SELECTION);
+			updateTurnStatus(GameStatus.FLOWER_SELECTION);
 		}
 	}
 
@@ -557,40 +440,7 @@ public class GameController implements GameControllerInterface {
 		return false;
 	}
 
-	private void restartTurn() {
-		currentRound.removeTurn(currentTurn);
-		goToNextTurn();
-	}
-
-	private void goToNextStep() {
-		switch(currentTurn.getStatus()) {
-			case WITHDRAW_FLOWER:
-				updateTurnStatus(TurnStatus.FLOWER_SELECTION);
-				break;
-			case FLOWER_SELECTION:
-				updateTurnStatus(TurnStatus.JUNIOR_GARDENER_FLOWER_SQUARE);
-				break;
-			case JUNIOR_GARDENER_FLOWER_SQUARE:
-				finishRoundOrUpdateTurnStatus(TurnStatus.SENIOR_GARDENER_FLOWER_SQUARE);
-				break;
-			case SENIOR_GARDENER_FLOWER_SQUARE:
-				finishRoundOrUpdateTurnStatus(TurnStatus.JUNIOR_GARDENER_HARU_ICHIBAN);
-				break;
-			case SENIOR_GARDENER_FROG_SQUARE:
-				updateTurnStatus(TurnStatus.JUNIOR_GARDENER_HARU_ICHIBAN);
-				break;
-			case JUNIOR_GARDENER_HARU_ICHIBAN:
-				finishRoundOrUpdateTurnStatus(TurnStatus.SENIOR_GARDENER_DARKENED_NENUFAR);
-				break;
-			case SENIOR_GARDENER_DARKENED_NENUFAR:
-				goToNextTurn();
-				break;
-			default:
-				break;
-		}
-	}
-
-	private void finishRoundOrUpdateTurnStatus(TurnStatus status) {
+	private void finishRoundOrUpdateTurnStatus(GameStatus status) {
 		int redPoints = calculateRedPoints();
 		int yellowPoints = calculateYellowPoints();
 		if(redPoints > 0 || yellowPoints > 0) {
@@ -616,244 +466,26 @@ public class GameController implements GameControllerInterface {
 	}
 
 	private boolean isWithdrawFlowerStatus() {
-		return isCurrentTurnStatus(TurnStatus.WITHDRAW_FLOWER);
+		return isCurrentTurnStatus(GameStatus.WITHDRAW_FLOWER);
 	}
 
 	private boolean isFlowerSelectionStatus() {
-		return isCurrentTurnStatus(TurnStatus.FLOWER_SELECTION);
+		return isCurrentTurnStatus(GameStatus.FLOWER_SELECTION);
 	}
 	
-	private boolean canSelectJuniorGardenerFlowerSquare() {
-		return isCurrentTurnStatus(TurnStatus.JUNIOR_GARDENER_FLOWER_SQUARE);
-	}
-
-	private boolean canSelectSeniorGardenerFlowerSquare() {
-		return isCurrentTurnStatus(TurnStatus.SENIOR_GARDENER_FLOWER_SQUARE);
-	}
-
-	private boolean canDefineSeniorGardenerFrogSquare() {
-		return isCurrentTurnStatus(TurnStatus.SENIOR_GARDENER_FROG_SQUARE) && currentFrog != null;
-	}
-
-	private boolean canExecuteHaruIchiban() {
-		return isCurrentTurnStatus(TurnStatus.JUNIOR_GARDENER_HARU_ICHIBAN);
-	}
-
-	private boolean canDefineDarkenedNenufar() {
-		return isCurrentTurnStatus(TurnStatus.SENIOR_GARDENER_DARKENED_NENUFAR);
-	}
-	
-	private boolean isCurrentTurnStatus(TurnStatus status) {
+	private boolean isCurrentTurnStatus(GameStatus status) {
 		return hasCurrentGame() && currentTurn.isStatus(status);
-	}
-
-	private boolean withdrawedRedFlowers() {
-		return currentTurn.getRedFlowers().size() == AVAILABLE_SELECT_FLOWERS;
-	}
-
-	private boolean withdrawedYellowFlowers() {
-		return currentTurn.getYellowFlowers().size() == AVAILABLE_SELECT_FLOWERS;
-	}
-
-	private boolean canMoveJuniorGardenerFlowerToSquare(int row, int column) {
-		Nenufar nenufar = currentBoard.getElementAtSquare(row, column);
-		return (nenufar != null && nenufar.getActiveSide() == NenufarSide.DARKENED && !nenufar.isFlowered());
-	}
-
-	private boolean canMoveSeniorGardenerFrogToSquare(int row, int column) {
-		Nenufar nenufar = currentBoard.getElementAtSquare(row, column);
-		return (currentFrog != null && nenufar != null && nenufar.getElement() == null && nenufar.getActiveSide() == NenufarSide.LIGHTED);
-	}
-
-	private boolean canMoveSeniorGardenerFlowerToSquare(int row, int column) {
-		Nenufar nenufar = currentBoard.getElementAtSquare(row, column);
-		return (nenufar != null && !nenufar.isFlowered());
-	}
-
-	private void moveJuniorGardenerFlowerToSquare(int row, int column) {
-		Square<Nenufar> square 	= currentBoard.getSquare(row, column);
-		Flower flower 			= currentTurn.getSelectedJuniorGardenerFlower();
-		GardenerColor color 	= currentTurn.getJuniorGardenerColor();
-		moveGardenerFlowerToSquare(square, flower, color);
-	}
-	
-	private void moveSeniorGardenerFlowerToSquare(int row, int column) {
-		Square<Nenufar> square 	= currentBoard.getSquare(row, column);
-		Nenufar lastElement		= square.getElement();
-		if(lastElement != null && lastElement.getElement() != null && (lastElement.getElement().getClass() == RedFrog.class || lastElement.getElement().getClass() == YellowFrog.class)) {
-			currentFrog = (Frog) lastElement.getElement();
-		} else {
-			currentFrog = null;
-		}
-		Flower flower 			= currentTurn.getSelectedSeniorGardenerFlower();
-		GardenerColor color 	= currentTurn.getSeniorGardenerColor();
-		moveGardenerFlowerToSquare(square, flower, color);
-		if(currentFrog != null) {
-			updateTurnStatus(TurnStatus.SENIOR_GARDENER_FROG_SQUARE);
-		} else {
-			goToNextStep();
-		}
-	}
-	
-	private void moveSeniorGardenerFrogToSquare(int row, int column) {
-		currentBoard.getElementAtSquare(row, column).setElement(currentFrog);
-		notifyUpdatedBoard();
-	}
-	
-	private void moveGardenerFlowerToSquare(Square<Nenufar> square, Flower flower, GardenerColor color) {
-		currentTurn.removeFlower(flower, color);
-		currentBoard.getElementAtSquare(square).setElement(flower);
-		currentBoard.getElementAtSquare(square).activeTopSide();
-		notifyUpdatedFlowers(color);
-		notifyUpdatedBoard();
-	}
-
-	private boolean hasSelectedSquareToHaruIchiban() {
-		return selectedSquare != null;
-	}
-
-	private void callHaruIchiban(int row, int column) {
-		Square<Nenufar> square = currentBoard.getSquare(row, column);
-		if(square.getElement() == null) {
-			if(getHaruIchibanDirection(square) != null) {
-				callHaruIchiban(square);
-			} else {
-				selectSquareToHaruIchiban(null);
-			}
-		} else if(square == selectedSquare) {
-			selectSquareToHaruIchiban(null);
-		} else {
-			selectSquareToHaruIchiban(square);
-		}
-	}
-	
-	private void callHaruIchiban(Square<Nenufar> square) {
-		Direction direction = getHaruIchibanDirection(square);
-		if(direction != null) {
-			Square<Nenufar> nextSquare;
-			while(square != selectedSquare) {
-				nextSquare = currentBoard.getSquare(getHaruIchibanX(direction, square.getRow()), getHaruIchibanY(direction, square.getColumn()));
-				square.setElement(nextSquare.getElement());
-				square = nextSquare;
-			}
-			selectedSquare.setElement(null);
-			selectSquareToHaruIchiban(null);
-			goToNextStep();
-		}
-	}
-
-	private int getHaruIchibanY(Direction direction, int y) {
-		switch(direction) {
-			case LEFT: 	return y + 1;
-			case RIGHT: return y - 1;
-			default: 	return y;
-		}
-	}
-
-	private int getHaruIchibanX(Direction direction, int x) {
-		switch(direction) {
-			case UP: 	return x + 1;
-			case DOWN: 	return x - 1;
-			default: 	return x;
-		}
-	}
-
-	private Direction getHaruIchibanDirection(int rowIndex, int columnIndex) {
-		return getHaruIchibanDirection(currentBoard.getSquare(rowIndex, columnIndex));
-	}
-
-	private Direction getHaruIchibanDirection(Square<Nenufar> square) {
-		Direction direction = null;
-		if(selectedSquare != null) {
-			if(square != selectedSquare && square.getElement() == null) {
-				if(selectedSquare.getRow() == square.getRow()) {
-					if(square.getColumn() < selectedSquare.getColumn()) {
-						direction = Direction.LEFT;
-					} else if(square.getColumn() > selectedSquare.getColumn()) {
-						direction = Direction.RIGHT;
-					}
-				} else if(this.selectedSquare.getColumn() == square.getColumn()) {
-					if(square.getRow() < selectedSquare.getRow()) {
-						direction = Direction.UP;
-					} else if(square.getRow() > selectedSquare.getRow()) {
-						direction = Direction.DOWN;
-					}
-				}
-				direction = (canMoveToDirection(direction, square)) ? direction : null;
-			}
-		}
-		return direction;
-	}
-
-	private boolean canMoveToDirection(Direction direction, Square<Nenufar> square) {
-		if(direction != null) {
-			Square<Nenufar> nextSquare = selectedSquare;
-			while(square != selectedSquare) {
-				nextSquare = currentBoard.getSquare(getHaruIchibanX(direction, square.getRow()), getHaruIchibanY(direction, square.getColumn()));
-				if(nextSquare.getElement() == null) {
-					return false;
-				}
-				square = nextSquare;
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private void selectSquareToHaruIchiban(int row, int column) {
-		selectSquareToHaruIchiban(currentBoard.getSquare(row, column));
-	}
-	
-	private void selectSquareToHaruIchiban(Square<Nenufar> square) {
-		selectedSquare = square;
-		notifyUpdatedBoard();
-	}
-
-	private boolean canDefineDarkenedNenufarToSquare(int row, int column) {
-		Nenufar nenufar = currentBoard.getElementAtSquare(row, column);
-		return nenufar != null && nenufar.getClass() == LightedNenufar.class && nenufar.getElement() == null;
-	}
-	
-	private void defineDarkenedNenufarToSquare(int row, int column) {
-		currentBoard.getElementAtSquare(row, column).activeBottomSide();
-		notifyUpdatedBoard();
 	}
 	
 	private boolean hasCurrentGame() {
 		return game != null;
 	}
-	
-	private void defineGardeners() {
-		if(redAndYellowNumbersHasBeenSelected()) {
-			int redNumber = currentTurn.getSelectedRedNumber();
-			int yellowNumber = currentTurn.getSelectedYellowNumber();
-			if(redNumber > yellowNumber) {
-				defineGardeners(game.getRedGardener(), game.getYellowGardener());
-			} else if(redNumber < yellowNumber) {
-				defineGardeners(game.getYellowGardener(), game.getRedGardener());
-			} else {
-				restartTurn();
-			}
+
+	private void updateTurnStatus(GameStatus status) {
+		if(currentTurn != null) {
+			currentTurn.setStatus(status);
+			notifyUpdatedTurnStatus();
 		}
-	}
-
-	private boolean redAndYellowNumbersHasBeenSelected() {
-		return hasCurrentGame() && currentTurn.hasSelectedRedFlower() && currentTurn.hasSelectedYellowFlower();
-	}
-
-	private void defineGardeners(Gardener seniorGardener, Gardener yellowGardener) {
-		currentTurn.setSeniorGardener(seniorGardener);
-		currentTurn.setJuniorGardener(yellowGardener);
-		hideRedFlowerNumber();
-		hideYellowFlowerNumber();
-		notifyGardenersAreDefined();
-		goToNextStep();
-	}
-
-	private void updateTurnStatus(TurnStatus status) {
-		currentTurn.setStatus(status);
-		notifyUpdatedTurnStatus();
 	}
 	
 	protected void notifyUpdatedBoard() {
@@ -911,7 +543,7 @@ public class GameController implements GameControllerInterface {
 	}
 
 	protected void notifyUpdatedTurnStatus() {
-		String status = currentTurn.getStatus().getDescricao();
+		String status = state.toString();
 		for(GameControllerObserver observer : observers) {
 			observer.updateStatus(status);
 		}
@@ -939,6 +571,161 @@ public class GameController implements GameControllerInterface {
 		for(GameControllerObserver observer : observers) {
 			observer.withdrawedYellowFlowers();
 		}
+	}
+
+	public void setGame(Game<Nenufar> game) {
+		this.game = game;
+		this.currentBoard = game.getBoard();
+		this.goToNextRound();
+	}
+
+	public void setState(AbstractControllerState state) {
+		this.state = state;
+		updateTurnStatus(state.getStatus());
+		System.out.println("Novo estado: "+state);
+	}
+
+	public Flower removeRoundWithdrawRedFlower(int index) {
+		Flower flower = currentRound.removeWithdrawRedFlower(index);
+		notifyUpdatedWithdrawRedFlowers();
+		return flower;
+	}
+
+	public void addTurnRedFlower(Flower flower) {
+		currentTurn.addRedFlower(flower);
+		notifyUpdatedRedFlowers();
+	}
+
+	public Flower removeRoundWithdrawYellowFlower(int index) {
+		Flower flower = currentRound.removeWithdrawYellowFlower(index);
+		notifyUpdatedWithdrawYellowFlowers();
+		return flower;
+	}
+
+	public void addTurnYellowFlower(Flower flower) {
+		currentTurn.addYellowFlower(flower);
+		notifyUpdatedYellowFlowers();
+	}
+	
+	public boolean checkWithdrawedRedFlowers() {
+		boolean withdrawed = withdrawedRedFlowers();
+		if(withdrawed) {
+			notifyWithdrawedRedFlowers();
+		}
+		return withdrawed;
+	}
+	
+	public boolean checkWithdrawedYellowFlowers() {
+		boolean withdrawed = withdrawedYellowFlowers();
+		if(withdrawed) {
+			notifyWithdrawedYellowFlowers();
+		}
+		return withdrawed;
+	}
+
+	private boolean withdrawedRedFlowers() {
+		return currentTurn.getRedFlowers().size() == AVAILABLE_SELECT_FLOWERS;
+	}
+
+	private boolean withdrawedYellowFlowers() {
+		return currentTurn.getYellowFlowers().size() == AVAILABLE_SELECT_FLOWERS;
+	}
+
+	public boolean hasTurnSelectedRedFlower() {
+		return currentTurn.hasSelectedRedFlower();
+	}
+
+	public boolean hasTurnSelectedYellowFlower() {
+		return currentTurn.hasSelectedYellowFlower();
+	}
+
+	public void setTurnSelectedRedFlower(int index) {
+		currentTurn.setSelectedRedFlower(index);
+		notifyUpdatedRedFlowers();
+	}
+
+	public void setTurnSelectedYellowFlower(int index) {
+		currentTurn.setSelectedYellowFlower(index);
+		notifyUpdatedYellowFlowers();
+	}
+
+	public int getTurnSelectedRedNumber() {
+		return currentTurn.getSelectedRedNumber();
+	}
+
+	public int getTurnSelectedYellowNumber() {
+		return currentTurn.getSelectedYellowNumber();
+	}
+
+	public Gardener getRedGardener() {
+		return game.getRedGardener();
+	}
+
+	public Gardener getYellowGardener() {
+		return game.getYellowGardener();
+	}
+
+	public void updateTurnGardeners(Gardener seniorGardener, Gardener yellowGardener) {
+		currentTurn.setSeniorGardener(seniorGardener);
+		currentTurn.setJuniorGardener(yellowGardener);
+		hideRedFlowerNumber();
+		hideYellowFlowerNumber();
+		notifyGardenersAreDefined();
+	}
+
+	public Board<Nenufar> getCurrentBoard() {
+		return currentBoard;
+	}
+
+	public Turn getCurrentTurn() {
+		return currentTurn;
+	}
+	
+	public void moveGardenerFlowerToSquare(Square<Nenufar> square, Flower flower, GardenerColor color) {
+		currentTurn.removeFlower(flower, color);
+		currentBoard.getElementAtSquare(square).setElement(flower);
+		currentBoard.getElementAtSquare(square).activeTopSide();
+		notifyUpdatedFlowers(color);
+		notifyUpdatedBoard();
+	}
+
+	public void goToNextRound() {
+		currentRound = createRound();
+		game.addRound(currentRound);
+		clearBoard();
+		notifyStartedRound();
+		currentTurn = null;
+		goToNextTurn();
+	}
+
+	public void setCurrentFrog(Frog frog) {
+		this.currentFrog = frog;
+	}
+	
+	public void setSelectedSquare(Square<Nenufar> square) {
+		selectedSquare = square;
+		notifyUpdatedBoard();
+	}
+
+	public boolean hasCurrentFrog() {
+		return currentFrog != null;
+	}
+
+	public Frog getCurrentFrog() {
+		return currentFrog;
+	}
+
+	public boolean hasSelectedSquare() {
+		return selectedSquare != null;
+	}
+
+	public void setElementAtSquare(Nenufar nenufar, int row, int column) {
+		currentBoard.setElementAtSquare(nenufar, row, column);
+		notifyUpdatedBoard();
+	}
+
+	public Square<Nenufar> getSelectedSquare() {
+		return selectedSquare;
 	}
 
 }

@@ -18,6 +18,7 @@ public class MainUtils {
 
 	public static void catchException(Exception e) {
 		ErrorPane.show(e.getMessage());
+		e.printStackTrace();
 	}
 
 }

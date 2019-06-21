@@ -1,4 +1,4 @@
-package game.controller.exception;
+package game.controller.exception.time;
 
 @SuppressWarnings("serial")
 public class InvallidDefineDarkenedNenufarTimeException extends InvallidMoveTimeException {

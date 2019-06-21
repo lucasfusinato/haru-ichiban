@@ -9,7 +9,7 @@ import game.model.gardener.GardenerColor;
 
 public class Turn {
 	
-	private TurnStatus status;
+	private GameStatus status;
 	private List<Flower> redFlowers;
 	private List<Flower> yellowFlowers;
 	private Flower selectedRedFlower;
@@ -22,7 +22,7 @@ public class Turn {
 		yellowFlowers = new ArrayList<>();
 	}
 
-	public boolean isStatus(TurnStatus status) {
+	public boolean isStatus(GameStatus status) {
 		return this.status == status;
 	}
 
@@ -34,8 +34,16 @@ public class Turn {
 		return selectedRedFlower != null;
 	}
 
+	public void setSelectedYellowFlower(int selectedFlower) {
+		setSelectedYellowFlower(getYellowFlower(selectedFlower));
+	}
+
 	public void setSelectedYellowFlower(Flower selectedFlower) {
 		selectedYellowFlower = selectedFlower;
+	}
+
+	public void setSelectedRedFlower(int selectedFlower) {
+		setSelectedRedFlower(getRedFlower(selectedFlower));
 	}
 
 	public void setSelectedRedFlower(Flower selectedFlower) {
@@ -58,7 +66,7 @@ public class Turn {
 		seniorGardener = gardener;
 	}
 
-	public void setStatus(TurnStatus status) {
+	public void setStatus(GameStatus status) {
 		this.status = status;
 	}
 
@@ -70,7 +78,7 @@ public class Turn {
 		return seniorGardener;
 	}
 
-	public TurnStatus getStatus() {
+	public GameStatus getStatus() {
 		return status;
 	}
 

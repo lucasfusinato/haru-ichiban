@@ -71,7 +71,7 @@ public abstract class AbstractGamePanel extends JPanel implements GameController
 
 	@Override
 	public void updateStatus(String status) {
-		JOptionPane.showMessageDialog(this, status);
+		JOptionPane.showMessageDialog(this, "Status: "+status+".");
 	}
 
 	@Override

@@ -1,14 +1,17 @@
 package game.controller.state;
 
 import game.controller.GameController;
-import game.controller.exception.InvallidHaruIchibanTimeException;
-import game.controller.exception.InvallidJuniorGardenerFlowerTimeException;
-import game.controller.exception.InvallidRedFlowerTimeException;
-import game.controller.exception.InvallidSeniorGardenerDarkenedNenufarTimeException;
-import game.controller.exception.InvallidSeniorGardenerFlowerTimeException;
-import game.controller.exception.InvallidSeniorGardenerFrogTimeException;
-import game.controller.exception.InvallidStartGameTimeException;
-import game.controller.exception.InvallidYellowFlowerTimeException;
+import game.controller.exception.move.InvallidSeniorGardenerDarkenedNenufarTimeException;
+import game.controller.exception.time.InvallidHaruIchibanTimeException;
+import game.controller.exception.time.InvallidJuniorGardenerFlowerTimeException;
+import game.controller.exception.time.InvallidRedFlowerTimeException;
+import game.controller.exception.time.InvallidSeniorGardenerFlowerTimeException;
+import game.controller.exception.time.InvallidSeniorGardenerFrogTimeException;
+import game.controller.exception.time.InvallidStartGameTimeException;
+import game.controller.exception.time.InvallidWithdrawRedFlowerTimeExpcetion;
+import game.controller.exception.time.InvallidWithdrawYellowFlowerTimeExpcetion;
+import game.controller.exception.time.InvallidYellowFlowerTimeException;
+import game.model.GameStatus;
 
 public abstract class AbstractControllerState {
 	
@@ -20,6 +23,14 @@ public abstract class AbstractControllerState {
 	
 	public void startGame(String redGardener, String yellowGardener, int gameType) throws Exception {
 		throw new InvallidStartGameTimeException(toString());
+	}
+	
+	public void withdrawRedFlower(int index) throws Exception {
+		throw new InvallidWithdrawRedFlowerTimeExpcetion(toString());
+	}
+	
+	public void withdrawYellowFlower(int index) throws Exception {
+		throw new InvallidWithdrawYellowFlowerTimeExpcetion(toString());
 	}
 	
 	public void selectRedFlower(int index) throws Exception {
@@ -49,8 +60,20 @@ public abstract class AbstractControllerState {
 	public void defineDarkenedNenufar(int row, int column) throws Exception {
 		throw new InvallidSeniorGardenerDarkenedNenufarTimeException(toString());
 	}
+
+	public boolean hasBoardInfoAt(int rowIndex, int columnIndex) {
+		return false;
+	}
+
+	public String getBoardInfoAt(int rowIndex, int columnIndex) {
+		return null;
+	}
 	
 	@Override
-	public abstract String toString();
+	public String toString() {
+		return getStatus().getDescricao();
+	}
+	
+	public abstract GameStatus getStatus();
 		
 }

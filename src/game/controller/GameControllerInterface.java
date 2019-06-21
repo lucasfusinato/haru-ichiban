@@ -1,12 +1,12 @@
 package game.controller;
 
-import game.model.TurnStatus;
+import game.model.GameStatus;
 
 public interface GameControllerInterface {
 
 	void attach(GameControllerObserver observer);
 
-	void startGame(String redPlayer, String yellowPlayer, int configuration);
+	void startGame(String redPlayer, String yellowPlayer, int configuration) throws Exception;
 
 	void selectRedFlower(int index) throws Exception;
 
@@ -74,7 +74,7 @@ public interface GameControllerInterface {
 
 	void withdrawYellowFlowerAt(int index) throws Exception;
 
-	TurnStatus getTurnStatus();
+	GameStatus getTurnStatus();
 
 	String getWithdrawRedFlowerAt(int index);
 

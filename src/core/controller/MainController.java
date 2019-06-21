@@ -45,7 +45,7 @@ public class MainController implements MainControllerInterface {
 	}
 
 	@Override
-	public void startGame() {
+	public void startGame() throws Exception {
 		GameControllerInterface gameController = new GameController();
 		gameController.startGame(player1, player2, level);
 		notifyGameStarted(gameController);
