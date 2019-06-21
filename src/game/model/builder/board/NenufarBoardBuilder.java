@@ -1,8 +1,6 @@
 package game.model.builder.board;
 
 import game.model.factory.NenufarFactory;
-import game.model.factory.RedGardenerFactory;
-import game.model.factory.YellowGardenerFactory;
 import game.model.nenufar.Nenufar;
 
 public abstract class NenufarBoardBuilder extends BoardBuilder<Nenufar> {
@@ -25,13 +23,13 @@ public abstract class NenufarBoardBuilder extends BoardBuilder<Nenufar> {
 		if(isStartDarkenedNenufarSquare(i, j)) {
 			return nenufarFactory.createDarkenedNenufar();
 		} else if(isStartLightedNenufarSquare(i, j)) {
-			Nenufar nenufar = nenufarFactory.createLightedNenufar();
 			if(isStartRedFrogNenufarSquare(i, j)) {
-				nenufar.setElement(RedGardenerFactory.getInstance().createFrog());				
+				return nenufarFactory.createRedEggNenufar();
 			} else if(isStartYellowFrogNenufarSquare(i, j)) {
-				nenufar.setElement(YellowGardenerFactory.getInstance().createFrog());
+				return nenufarFactory.createYellowEggNenufar();
+			} else {
+				return nenufarFactory.createLightedNenufar();
 			}
-			return nenufar;  	
 		}
 		return null;
 	}

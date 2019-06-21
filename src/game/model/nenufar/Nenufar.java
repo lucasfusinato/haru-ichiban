@@ -19,6 +19,7 @@ public abstract class Nenufar implements Element {
 		this.bottomSide = bottomSide;
 		defineRotation();
 		activeTopSide();
+		resetElement();
 	}
 	
 	private void defineRotation() {
@@ -65,6 +66,14 @@ public abstract class Nenufar implements Element {
 
 	public NenufarSide getActiveSide() {
 		return activeSide;
+	}
+
+	public void resetElement() {
+		element = createDefaultElement();
+	}
+
+	protected Element createDefaultElement() {
+		return null;
 	}
 
 }

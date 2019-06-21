@@ -63,5 +63,9 @@ public abstract class AbstractGameComponentsPanel extends JPanel {
 	public void updateBoard() {
 		gameBoardPanel.refreshBoard();
 	}
+
+	public void updateScore(int score1, int score2) {
+		scoreboardPanel.updateScore(score1, score2);
+	}
 	
 }

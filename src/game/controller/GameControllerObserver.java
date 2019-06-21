@@ -24,4 +24,8 @@ public interface GameControllerObserver {
 
 	void withdrawedYellowFlowers();
 
+	void updateScore(int score1, int score2);
+
+	void startedRound(int round);
+
 }

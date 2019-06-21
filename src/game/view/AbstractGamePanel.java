@@ -108,5 +108,17 @@ public abstract class AbstractGamePanel extends JPanel implements GameController
 	public void withdrawedYellowFlowers() {
 		yellowGardenerPanel.closeFlowerWithdrawPanel();
 	}
+	
+	@Override
+	public void updateScore(int score1, int score2) {
+		JOptionPane.showMessageDialog(null, "O jogador vermelho fez "+score1+" pontos.");
+		JOptionPane.showMessageDialog(null, "O jogador amarelo fez "+score2+" pontos.");
+		gameComponentsPanel.updateScore(score1, score2);
+	}
+	
+	@Override
+	public void startedRound(int round) {
+		JOptionPane.showMessageDialog(null, "A rodada "+round+" irá iniciar.");
+	}
 
 }

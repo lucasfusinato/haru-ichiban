@@ -2,11 +2,6 @@ package game.view.scoringtrack;
 
 import java.awt.Graphics;
 import java.awt.GridLayout;
-//import java.awt.Image;
-//
-//import javax.swing.ImageIcon;
-//
-//import utils.view.ResizedImageIconFactory;
 
 @SuppressWarnings("serial")
 public class ScoringTrackPanel extends AbstractScoreboardPanel {
@@ -41,20 +36,6 @@ public class ScoringTrackPanel extends AbstractScoreboardPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		//g.drawImage(createBackgroundImage(), 0, 0, getWidth(), getHeight(), this);
 	}
 	
-//	private Image createBackgroundImage() {
-//		ImageIcon imageIcon = ResizedImageIconFactory.create(getBackgroundImagePath(), this.getWidth(), this.getHeight());
-//		if(imageIcon != null) {
-//			return imageIcon.getImage();
-//		} else {
-//			return null;
-//		}
-//	}
-	
-//	private String getBackgroundImagePath() {
-//		return "images/scoring-track-background.png";
-//	}
-
 }

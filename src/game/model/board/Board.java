@@ -1,5 +1,7 @@
 package game.model.board;
 
+import game.model.visitor.BoardVisitor;
+
 public class Board<E> {
 	
 	private final int ROWS;
@@ -52,6 +54,10 @@ public class Board<E> {
 	
 	public final int getCols() {
 		return this.COLS;
+	}
+	
+	public void accept(BoardVisitor<E> visitor) {
+		visitor.visit(this);
 	}
 	
 }

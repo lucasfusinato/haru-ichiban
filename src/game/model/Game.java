@@ -10,6 +10,8 @@ public class Game<E> {
 
 	private Gardener redGardener;
 	private Gardener yellowGardener;
+	private int redPoints;
+	private int yellowPoints;
 	private List<Round> rounds;
 	private int roundQuantity;
 	private Board<E> board;
@@ -62,4 +64,28 @@ public class Game<E> {
 		this.board = board;
 	}
 
+	public int getRedPoints() {
+		return redPoints;
+	}
+
+	public void setRedPoints(int redPoints) {
+		this.redPoints = redPoints;
+	}
+
+	public int getYellowPoints() {
+		return yellowPoints;
+	}
+
+	public void setYellowPoints(int yellowPoints) {
+		this.yellowPoints = yellowPoints;
+	}
+
+	public void addRedPoints(int redPoints) {
+		this.redPoints += redPoints;
+	}
+
+	public void addYellowPoints(int yellowPoints) {
+		this.yellowPoints += yellowPoints;
+	}
+	
 }

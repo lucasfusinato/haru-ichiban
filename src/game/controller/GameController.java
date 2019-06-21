@@ -26,6 +26,9 @@ import game.model.gardener.Gardener;
 import game.model.gardener.GardenerColor;
 import game.model.nenufar.Nenufar;
 import game.model.nenufar.NenufarSide;
+import game.model.visitor.BoardBloomPointsVisitor;
+import game.model.visitor.BoardRedBloomPoinstVisitor;
+import game.model.visitor.BoardYellowBloomPoinstVisitor;
 import game.model.nenufar.LightedNenufar;
 import game.controller.exception.InvallidDarkenedNenufarSquareException;
 import game.controller.exception.InvallidDefineDarkenedNenufarTimeException;
@@ -455,8 +458,24 @@ public class GameController implements GameControllerInterface {
 	private void goToNextRound() {
 		currentRound = createRound();
 		game.addRound(currentRound);
-		notifyUpdatedBoard();
+		clearBoard();
+		notifyStartedRound();
+		currentTurn = null;
 		goToNextTurn();
+	}
+
+	private void clearBoard() {
+		int rows = currentBoard.getRows();
+		int cols = currentBoard.getCols();
+		for(int i = 0; i < rows; i++) {
+			for(int j = 0; j < cols; j++) {
+				Nenufar element = currentBoard.getElementAtSquare(i, j);
+				if(element != null) {
+					element.resetElement();
+				}
+			}
+		}
+		notifyUpdatedBoard();
 	}
 
 	private Round createRound() {
@@ -552,14 +571,16 @@ public class GameController implements GameControllerInterface {
 				updateTurnStatus(TurnStatus.JUNIOR_GARDENER_FLOWER_SQUARE);
 				break;
 			case JUNIOR_GARDENER_FLOWER_SQUARE:
-				updateTurnStatus(TurnStatus.SENIOR_GARDENER_FLOWER_SQUARE);
+				finishRoundOrUpdateTurnStatus(TurnStatus.SENIOR_GARDENER_FLOWER_SQUARE);
 				break;
 			case SENIOR_GARDENER_FLOWER_SQUARE:
+				finishRoundOrUpdateTurnStatus(TurnStatus.JUNIOR_GARDENER_HARU_ICHIBAN);
+				break;
 			case SENIOR_GARDENER_FROG_SQUARE:
 				updateTurnStatus(TurnStatus.JUNIOR_GARDENER_HARU_ICHIBAN);
 				break;
 			case JUNIOR_GARDENER_HARU_ICHIBAN:
-				updateTurnStatus(TurnStatus.SENIOR_GARDENER_DARKENED_NENUFAR);
+				finishRoundOrUpdateTurnStatus(TurnStatus.SENIOR_GARDENER_DARKENED_NENUFAR);
 				break;
 			case SENIOR_GARDENER_DARKENED_NENUFAR:
 				goToNextTurn();
@@ -567,6 +588,31 @@ public class GameController implements GameControllerInterface {
 			default:
 				break;
 		}
+	}
+
+	private void finishRoundOrUpdateTurnStatus(TurnStatus status) {
+		int redPoints = calculateRedPoints();
+		int yellowPoints = calculateYellowPoints();
+		if(redPoints > 0 || yellowPoints > 0) {
+			game.addRedPoints(redPoints);
+			game.addYellowPoints(yellowPoints);
+			notifyUpdatedScore();
+			goToNextRound();
+		} else {
+			updateTurnStatus(status);
+		}
+	}
+
+	private int calculateRedPoints() {
+		BoardBloomPointsVisitor visitor = new BoardRedBloomPoinstVisitor();
+		visitor.visit(currentBoard);
+		return visitor.getPoints();
+	}
+
+	private int calculateYellowPoints() {
+		BoardBloomPointsVisitor visitor = new BoardYellowBloomPoinstVisitor();
+		visitor.visit(currentBoard);
+		return visitor.getPoints();
 	}
 
 	private boolean isWithdrawFlowerStatus() {
@@ -826,6 +872,21 @@ public class GameController implements GameControllerInterface {
 				break;
 			default:
 				break;
+		}
+	}
+
+	private void notifyUpdatedScore() {
+		int score1 = game.getRedPoints();
+		int score2 = game.getYellowPoints();
+		for(GameControllerObserver observer : observers) {
+			observer.updateScore(score1, score2);
+		}
+	}
+
+	private void notifyStartedRound() {
+		int currentRound = game.getRounds().size();
+		for(GameControllerObserver observer : observers) {
+			observer.startedRound(currentRound);
 		}
 	}
 
