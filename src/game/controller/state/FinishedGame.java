@@ -1,6 +1,7 @@
 package game.controller.state;
 
 import game.controller.GameController;
+import game.model.GameStatus;
 
 public class FinishedGame extends AbstractControllerState {
 
@@ -9,8 +10,8 @@ public class FinishedGame extends AbstractControllerState {
 	}
 
 	@Override
-	public String toString() {
-		return "Jogo finalizado";
+	public GameStatus getStatus() {
+		return GameStatus.FINISHED_GAME;
 	}
 
 }

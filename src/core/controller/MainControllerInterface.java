@@ -12,7 +12,7 @@ public interface MainControllerInterface {
 
 	void exitSystem();
 
-	void startGame();
+	void startGame() throws Exception;
 	
 	void definePlayer1(String playerName);
 	

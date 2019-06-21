@@ -1,6 +1,7 @@
 package game.controller.state;
 
 import game.controller.GameController;
+import game.model.GameStatus;
 
 public class GardenerCroak extends AbstractControllerState {
 
@@ -9,8 +10,8 @@ public class GardenerCroak extends AbstractControllerState {
 	}
 
 	@Override
-	public String toString() {
-		return "Aguardando jardineiro coaxar";
+	public GameStatus getStatus() {
+		return GameStatus.GARDENER_CROAK;
 	}
 
 }

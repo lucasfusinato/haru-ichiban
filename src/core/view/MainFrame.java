@@ -131,7 +131,11 @@ public class MainFrame extends JFrame implements MainControllerObserver {
 	public void confirmSelectedLevel() {
 		if(ConfirmPane.confirm("Confirma o nível selecionado?")) {
 			mainController.defineLevel(levelSelectionFrame.getLevel());
-			mainController.startGame();
+			try {
+				mainController.startGame();
+			} catch (Exception e) {
+				MainUtils.catchException(e);
+			}
 		}
 	}
 
