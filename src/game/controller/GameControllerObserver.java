@@ -24,8 +24,16 @@ public interface GameControllerObserver {
 
 	void withdrawedYellowFlowers();
 
-	void updateScore(int score1, int score2);
+	void updateScore(int score1, int score2, int addedScore2, int score22);
 
 	void startedRound(int round);
+
+	void showCroakButton();
+
+	void hideCroakButton();
+
+	void requestMoveRedFrog();
+
+	void requestMoveYellowFrog();
 
 }

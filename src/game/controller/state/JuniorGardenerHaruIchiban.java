@@ -1,20 +1,23 @@
 package game.controller.state;
 
-import game.controller.GameController;
-import game.model.Direction;
-import game.model.GameStatus;
 import game.model.board.Board;
 import game.model.board.Square;
+import game.model.game.GameStatus;
 import game.model.nenufar.Nenufar;
+import game.model.strategy.move.HaruIchibanDownMoveStrategy;
+import game.model.strategy.move.HaruIchibanLeftMoveStrategy;
+import game.model.strategy.move.HaruIchibanMoveStrategy;
+import game.model.strategy.move.HaruIchibanRightMoveStrategy;
+import game.model.strategy.move.HaruIchibanUpMoveStrategy;
 
-public class JuniorGardenerHaruIchiban extends AbstractControllerState {
+public class JuniorGardenerHaruIchiban extends AbstractPontuableState {
 
-	public JuniorGardenerHaruIchiban(GameController gameController) {
+	public JuniorGardenerHaruIchiban(GameControllerStateAccess gameController) {
 		super(gameController);
 	}
 	
 	@Override
-	public void executeHaruIchiban(int row, int column) throws Exception {
+	public void executeHaruIchiban(int row, int column) {
 		if(gameController.hasSelectedSquare()) {
 			callHaruIchiban(row, column);
 		} else {
@@ -24,12 +27,12 @@ public class JuniorGardenerHaruIchiban extends AbstractControllerState {
 	
 	@Override
 	public boolean hasBoardInfoAt(int rowIndex, int columnIndex) {
-		return getHaruIchibanDirection(rowIndex, columnIndex) != null;
+		return getHaruIchibanMoveStrategy(rowIndex, columnIndex) != null;
 	}
 
 	@Override
 	public String getBoardInfoAt(int rowIndex, int columnIndex) {
-		return getHaruIchibanDirection(rowIndex, columnIndex).getDescription();
+		return getHaruIchibanMoveStrategy(rowIndex, columnIndex).getDirection().getDescription();
 	}
 
 	@Override
@@ -40,7 +43,7 @@ public class JuniorGardenerHaruIchiban extends AbstractControllerState {
 	private void callHaruIchiban(int row, int column) {
 		Square<Nenufar> square = gameController.getCurrentBoard().getSquare(row, column);
 		if(square.getElement() == null) {
-			if(getHaruIchibanDirection(square) != null) {
+			if(getHaruIchibanMoveStrategy(square) != null) {
 				callHaruIchiban(square);
 			} else {
 				selectSquareToHaruIchiban(null);
@@ -53,13 +56,13 @@ public class JuniorGardenerHaruIchiban extends AbstractControllerState {
 	}
 	
 	private void callHaruIchiban(Square<Nenufar> square) {
-		Direction direction = getHaruIchibanDirection(square);
-		if(direction != null) {
+		HaruIchibanMoveStrategy strategy = getHaruIchibanMoveStrategy(square);
+		if(strategy != null) {
 			Board<Nenufar> currentBoard = gameController.getCurrentBoard();
 			Square<Nenufar> selectedSquare = gameController.getSelectedSquare();
 			Square<Nenufar> nextSquare;
 			while(square != selectedSquare) {
-				nextSquare = currentBoard.getSquare(getHaruIchibanX(direction, square.getRow()), getHaruIchibanY(direction, square.getColumn()));
+				nextSquare = currentBoard.getSquare(strategy.calculateNextRow(square.getRow()), strategy.calculateNextColumn(square.getColumn()));
 				square.setElement(nextSquare.getElement());
 				square = nextSquare;
 			}
@@ -77,57 +80,41 @@ public class JuniorGardenerHaruIchiban extends AbstractControllerState {
 		gameController.setSelectedSquare(square);
 	}
 
-	private int getHaruIchibanY(Direction direction, int y) {
-		switch(direction) {
-			case LEFT: 	return y + 1;
-			case RIGHT: return y - 1;
-			default: 	return y;
-		}
+	private HaruIchibanMoveStrategy getHaruIchibanMoveStrategy(int rowIndex, int columnIndex) {
+		return getHaruIchibanMoveStrategy(gameController.getCurrentBoard().getSquare(rowIndex, columnIndex));
 	}
 
-	private int getHaruIchibanX(Direction direction, int x) {
-		switch(direction) {
-			case UP: 	return x + 1;
-			case DOWN: 	return x - 1;
-			default: 	return x;
-		}
-	}
-
-	private Direction getHaruIchibanDirection(int rowIndex, int columnIndex) {
-		return getHaruIchibanDirection(gameController.getCurrentBoard().getSquare(rowIndex, columnIndex));
-	}
-
-	private Direction getHaruIchibanDirection(Square<Nenufar> square) {
-		Direction direction = null;
+	private HaruIchibanMoveStrategy getHaruIchibanMoveStrategy(Square<Nenufar> square) {
+		HaruIchibanMoveStrategy strategy = null;
 		Square<Nenufar> selectedSquare = gameController.getSelectedSquare();
 		if(selectedSquare != null) {
 			if(square != selectedSquare && square.getElement() == null) {
 				if(selectedSquare.getRow() == square.getRow()) {
 					if(square.getColumn() < selectedSquare.getColumn()) {
-						direction = Direction.LEFT;
+						strategy = new HaruIchibanLeftMoveStrategy();
 					} else if(square.getColumn() > selectedSquare.getColumn()) {
-						direction = Direction.RIGHT;
+						strategy = new HaruIchibanRightMoveStrategy();
 					}
 				} else if(selectedSquare.getColumn() == square.getColumn()) {
 					if(square.getRow() < selectedSquare.getRow()) {
-						direction = Direction.UP;
+						strategy = new HaruIchibanUpMoveStrategy();
 					} else if(square.getRow() > selectedSquare.getRow()) {
-						direction = Direction.DOWN;
+						strategy = new HaruIchibanDownMoveStrategy();
 					}
 				}
-				direction = (canMoveToDirection(direction, square)) ? direction : null;
+				strategy = (canUseMoveStrategy(strategy, square)) ? strategy : null;
 			}
 		}
-		return direction;
+		return strategy;
 	}
 
-	private boolean canMoveToDirection(Direction direction, Square<Nenufar> square) {
-		if(direction != null) {
+	private boolean canUseMoveStrategy(HaruIchibanMoveStrategy strategy, Square<Nenufar> square) {
+		if(strategy != null) {
 			Board<Nenufar> currentBoard = gameController.getCurrentBoard();
 			Square<Nenufar> selectedSquare = gameController.getSelectedSquare();
 			Square<Nenufar> nextSquare = selectedSquare;
 			while(square != selectedSquare) {
-				nextSquare = currentBoard.getSquare(getHaruIchibanX(direction, square.getRow()), getHaruIchibanY(direction, square.getColumn()));
+				nextSquare = currentBoard.getSquare(strategy.calculateNextRow(square.getRow()), strategy.calculateNextColumn(square.getColumn()));
 				if(nextSquare.getElement() == null) {
 					return false;
 				}
@@ -139,9 +126,10 @@ public class JuniorGardenerHaruIchiban extends AbstractControllerState {
 		}
 	}
 
-	private void goToNextStep() {
-		// TODO Auto-generated method stub
-		
+
+	@Override
+	protected void defaultStateChange() {
+		gameController.setState(new SeniorGardenerDarkenedNenufar(gameController));
 	}
 	
 }

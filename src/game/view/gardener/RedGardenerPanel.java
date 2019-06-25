@@ -1,6 +1,7 @@
 package game.view.gardener;
 
 import java.awt.Component;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
@@ -8,6 +9,7 @@ import javax.swing.border.Border;
 import game.controller.GameControllerInterface;
 import game.view.flowerselection.RedFlowerSelectionPanel;
 import game.view.flowerwithdraw.RedFlowerWithdrawDialog;
+import game.view.gardener.listener.RedCroakActionListener;
 
 @SuppressWarnings("serial")
 public class RedGardenerPanel extends AbstractGardenerPanel {
@@ -23,7 +25,7 @@ public class RedGardenerPanel extends AbstractGardenerPanel {
 
 	@Override
 	protected Component getRightComponent() {
-		return getFlowerSelectionPanel();
+		return createFlowerSelectionAndCroakButtonPanel();
 	}
 
 	@Override
@@ -44,6 +46,11 @@ public class RedGardenerPanel extends AbstractGardenerPanel {
 	@Override
 	protected RedFlowerWithdrawDialog createFlowerWithdrawDialog() {
 		return new RedFlowerWithdrawDialog(getGameController());
+	}
+
+	@Override
+	protected ActionListener getCroakActionListener() {
+		return new RedCroakActionListener(getGameController());
 	}
 
 }

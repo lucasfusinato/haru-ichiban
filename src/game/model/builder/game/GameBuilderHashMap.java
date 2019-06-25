@@ -2,7 +2,7 @@ package game.model.builder.game;
 
 import java.util.HashMap;
 
-import game.model.GameType;
+import game.model.game.GameType;
 import game.model.nenufar.Nenufar;
 
 public class GameBuilderHashMap {

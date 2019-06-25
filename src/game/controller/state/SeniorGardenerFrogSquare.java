@@ -1,24 +1,23 @@
 package game.controller.state;
 
-import game.controller.GameController;
-import game.controller.exception.move.InvallidSeniorGardenerFrogSquareException;
-import game.model.GameStatus;
+import game.controller.exception.move.InvalidGardenerFrogSquareException;
+import game.model.game.GameStatus;
 import game.model.nenufar.Nenufar;
 import game.model.nenufar.NenufarSide;
 
 public class SeniorGardenerFrogSquare extends AbstractControllerState {
 
-	public SeniorGardenerFrogSquare(GameController gameController) {
+	public SeniorGardenerFrogSquare(GameControllerStateAccess gameController) {
 		super(gameController);
 	}
 	
 	@Override
-	public void defineSeniorGardenerFrogSquare(int row, int column) throws Exception {
+	public void defineGardenerFrogSquare(int row, int column) throws Exception {
 		if(canMoveSeniorGardenerFrogToSquare(row, column)) {
 			moveSeniorGardenerFrogToSquare(row, column);
 			gameController.setState(new JuniorGardenerHaruIchiban(gameController));
 		} else {
-			throw new InvallidSeniorGardenerFrogSquareException();
+			throw new InvalidGardenerFrogSquareException();
 		}
 	}
 
@@ -36,6 +35,7 @@ public class SeniorGardenerFrogSquare extends AbstractControllerState {
 		Nenufar nenufar = gameController.getCurrentBoard().getElementAtSquare(row, column);
 		nenufar.setElement(gameController.getCurrentFrog());
 		gameController.setElementAtSquare(nenufar, row, column);
+		gameController.setCurrentFrog(null);
 	}
 
 }

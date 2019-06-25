@@ -1,11 +1,10 @@
 package game.controller.state;
 
-import game.controller.GameController;
-import game.model.GameStatus;
+import game.model.game.GameStatus;
 
 public class FinishedGame extends AbstractControllerState {
 
-	public FinishedGame(GameController gameController) {
+	public FinishedGame(GameControllerStateAccess gameController) {
 		super(gameController);
 	}
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import game.controller.GameController;
 import game.controller.GameControllerInterface;
-import game.model.GameType;
+import game.model.game.GameType;
 
 public class MainController implements MainControllerInterface {
 	

@@ -20,7 +20,7 @@ public abstract class NenufarGameBuilder extends GameBuilder<Nenufar> {
 				}
 			}
 		}
-		getGame().setRoundQuantity((int) (count / 2));
+		getGame().setTurnLimit((int) (count / 2));
 	}
 
 	@Override

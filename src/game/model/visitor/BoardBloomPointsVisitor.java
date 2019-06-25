@@ -1,13 +1,14 @@
 package game.model.visitor;
 
 import game.model.board.Board;
-import game.model.flower.Flower;
+import game.model.board.Square;
 import game.model.nenufar.Nenufar;
-import game.model.strategy.DirectionNenufarBloomStrategy;
-import game.model.strategy.HorizontalNenufarBloomStrategy;
-import game.model.strategy.LeftNenufarBloomStrategy;
-import game.model.strategy.RightNenufarBloomStrategy;
-import game.model.strategy.VerticalNenufarBloomStrategy;
+import game.model.strategy.bloom.DirectionNenufarBloomStrategy;
+import game.model.strategy.bloom.HorizontalNenufarBloomStrategy;
+import game.model.strategy.bloom.LeftNenufarBloomStrategy;
+import game.model.strategy.bloom.RightNenufarBloomStrategy;
+import game.model.strategy.bloom.VerticalNenufarBloomStrategy;
+import game.model.strategy.nenufar.CompareNenufarElementStrategy;
 
 public class BoardBloomPointsVisitor implements BoardVisitor<Nenufar> {
 
@@ -21,16 +22,16 @@ public class BoardBloomPointsVisitor implements BoardVisitor<Nenufar> {
 	private DirectionNenufarBloomStrategy verticalStrategy;
 	private DirectionNenufarBloomStrategy horizontalStrategy;
 	
-	private Class<? extends Flower> target;
 	private Board<Nenufar> scope;
 	private int points;
+	private CompareNenufarElementStrategy compareStrategy;
 	
-	public BoardBloomPointsVisitor(Class<? extends Flower> target) {
+	public BoardBloomPointsVisitor(CompareNenufarElementStrategy compareStrategy) {
 		this.rightStrategy = new RightNenufarBloomStrategy();
 		this.leftStrategy = new LeftNenufarBloomStrategy();
 		this.verticalStrategy = new VerticalNenufarBloomStrategy();
 		this.horizontalStrategy = new HorizontalNenufarBloomStrategy();
-		this.target = target;
+		this.compareStrategy = compareStrategy;
 		this.scope = null;
 		this.points = 0;
 	}
@@ -122,8 +123,8 @@ public class BoardBloomPointsVisitor implements BoardVisitor<Nenufar> {
 
 	private boolean foundTargetAtSquare(int i, int j) {
 		if(!this.isOutOfBounds(i, j)) {
-			Nenufar nenufar = this.scope.getElementAtSquare(i, j);
-			return (nenufar != null && nenufar.getElement() != null && nenufar.getElement().getClass() == this.target);
+			Square<Nenufar> square = this.scope.getSquare(i, j);
+			return compareStrategy.compare(square);
 		} else {
 			return false;
 		}

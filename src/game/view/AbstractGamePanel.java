@@ -110,9 +110,9 @@ public abstract class AbstractGamePanel extends JPanel implements GameController
 	}
 	
 	@Override
-	public void updateScore(int score1, int score2) {
-		JOptionPane.showMessageDialog(null, "O jogador vermelho fez "+score1+" pontos.");
-		JOptionPane.showMessageDialog(null, "O jogador amarelo fez "+score2+" pontos.");
+	public void updateScore(int addedScore1, int score1, int addedScore2, int score2) {
+		JOptionPane.showMessageDialog(null, "O jogador vermelho fez "+addedScore1+" pontos.");
+		JOptionPane.showMessageDialog(null, "O jogador amarelo fez "+addedScore2+" pontos.");
 		gameComponentsPanel.updateScore(score1, score2);
 	}
 	
@@ -120,5 +120,26 @@ public abstract class AbstractGamePanel extends JPanel implements GameController
 	public void startedRound(int round) {
 		JOptionPane.showMessageDialog(null, "A rodada "+round+" irá iniciar.");
 	}
+	
+	@Override
+	public void showCroakButton() {
+		redGardenerPanel.showCroakButton();
+		yellowGardenerPanel.showCroakButton();
+	}
+	
+	@Override
+	public void hideCroakButton() {
+		redGardenerPanel.hideCroakButton();
+		yellowGardenerPanel.hideCroakButton();
+	}
 
+	@Override
+	public void requestMoveRedFrog() {
+		JOptionPane.showMessageDialog(null, "Selecione uma casa para o sapo vermelho.");
+	}
+
+	@Override
+	public void requestMoveYellowFrog() {
+		JOptionPane.showMessageDialog(null, "Selecione uma casa para o sapo amarelo.");
+	}
 }

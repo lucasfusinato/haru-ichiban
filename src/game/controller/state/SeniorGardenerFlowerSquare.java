@@ -1,19 +1,18 @@
 package game.controller.state;
 
-import game.controller.GameController;
-import game.controller.exception.move.InvallidSeniorGardenerFlowerSquareException;
-import game.model.GameStatus;
+import game.controller.exception.move.InvalidSeniorGardenerFlowerSquareException;
 import game.model.board.Square;
 import game.model.flower.Flower;
 import game.model.frog.Frog;
 import game.model.frog.RedFrog;
 import game.model.frog.YellowFrog;
+import game.model.game.GameStatus;
 import game.model.gardener.GardenerColor;
 import game.model.nenufar.Nenufar;
 
-public class SeniorGardenerFlowerSquare extends AbstractControllerState {
+public class SeniorGardenerFlowerSquare extends AbstractPontuableState {
 
-	public SeniorGardenerFlowerSquare(GameController gameController) {
+	public SeniorGardenerFlowerSquare(GameControllerStateAccess gameController) {
 		super(gameController);
 	}
 	
@@ -21,8 +20,9 @@ public class SeniorGardenerFlowerSquare extends AbstractControllerState {
 	public void defineSeniorGardenerFlowerSquare(int row, int column) throws Exception {
 		if(canMoveSeniorGardenerFlowerToSquare(row, column)) {
 			moveSeniorGardenerFlowerToSquare(row, column);
+			goToNextStep();
 		} else {
-			throw new InvallidSeniorGardenerFlowerSquareException();
+			throw new InvalidSeniorGardenerFlowerSquareException();
 		}
 	}
 
@@ -47,15 +47,15 @@ public class SeniorGardenerFlowerSquare extends AbstractControllerState {
 		Flower flower 			= gameController.getCurrentTurn().getSelectedSeniorGardenerFlower();
 		GardenerColor color 	= gameController.getCurrentTurn().getSeniorGardenerColor();
 		gameController.moveGardenerFlowerToSquare(square, flower, color);
-		goToNextStep();
 	}
 
-	private void goToNextStep() {
-		//TODO
+	
+	@Override
+	protected void defaultStateChange() {
 		if(gameController.hasCurrentFrog()) {
 			gameController.setState(new SeniorGardenerFrogSquare(gameController));
 		} else {
-			goToNextStep();
+			gameController.setState(new JuniorGardenerHaruIchiban(gameController));
 		}
 	}
 

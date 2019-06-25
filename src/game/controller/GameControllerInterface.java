@@ -1,6 +1,6 @@
 package game.controller;
 
-import game.model.GameStatus;
+import game.model.game.GameStatus;
 
 public interface GameControllerInterface {
 
@@ -106,6 +106,10 @@ public interface GameControllerInterface {
 
 	int getRoundQuantity();
 
-	void defineSeniorGardenerFrogSquare(int row, int column) throws Exception;
+	void defineFrogSquare(int row, int column) throws Exception;
+
+	void redGardenerCroak() throws Exception;
+
+	void yellowGardenerCroak() throws Exception;
 
 }

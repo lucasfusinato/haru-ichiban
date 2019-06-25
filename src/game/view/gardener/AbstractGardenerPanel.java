@@ -1,12 +1,15 @@
 package game.view.gardener;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -23,6 +26,7 @@ public abstract class AbstractGardenerPanel extends JPanel {
 	private AbstractFlowerSelectionPanel flowerSelectionPanel;
 	private JLabel gardenerImageLabel;
 	private AbstractFlowerWithdrawDialog flowerWithdrawDialog;
+	private JButton croakButton;
 	
 	public AbstractGardenerPanel(GameControllerInterface gameController) {
 		this.gameController = gameController;
@@ -39,6 +43,7 @@ public abstract class AbstractGardenerPanel extends JPanel {
 	private void initComponents() {
 		this.flowerSelectionPanel = createFlowerSelectionPanel();
 		this.gardenerImageLabel = createGardenerImageLabel();
+		this.croakButton = createCroakButton();
 		this.flowerWithdrawDialog = createFlowerWithdrawDialog();
 	}
 
@@ -84,8 +89,35 @@ public abstract class AbstractGardenerPanel extends JPanel {
 		return new JLabel(ResizedImageIconFactory.create(getGardenerImagePath(), 120, 120));
 	}
 	
+	private JButton createCroakButton() {
+		JButton button = new JButton("Coachar");
+		button.setVisible(false);
+		button.setPreferredSize(new Dimension(100, 25));
+		button.addActionListener(getCroakActionListener());
+		return button;
+	}
+	
+	protected abstract ActionListener getCroakActionListener();
+
 	protected AbstractFlowerSelectionPanel getFlowerSelectionPanel() {
 		return flowerSelectionPanel;
+	}
+
+	protected Component createFlowerSelectionAndCroakButtonPanel() {
+		JPanel panel = new JPanel();
+		panel.setOpaque(false);
+		panel.setLayout(new GridBagLayout());
+		
+		GridBagConstraints cons;
+		cons = new GridBagConstraints();
+		cons.gridy = 0;
+		panel.add(flowerSelectionPanel, cons);
+
+		cons = new GridBagConstraints();
+		cons.gridy = 1;
+		panel.add(croakButton, cons);
+		
+		return panel;
 	}
 	
 	protected JLabel getGardenerImageLabel() {
@@ -111,6 +143,14 @@ public abstract class AbstractGardenerPanel extends JPanel {
 
 	public void closeFlowerWithdrawPanel() {
 		flowerWithdrawDialog.setVisible(false);
+	}
+
+	public void showCroakButton() {
+		croakButton.setVisible(true);
+	}
+	
+	public void hideCroakButton() {
+		croakButton.setVisible(false);
 	}
 	
 }

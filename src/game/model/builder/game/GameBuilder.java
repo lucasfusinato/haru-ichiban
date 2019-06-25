@@ -1,8 +1,8 @@
 package game.model.builder.game;
 
-import game.model.Game;
 import game.model.builder.board.BoardBuilder;
 import game.model.builder.board.BoardDirector;
+import game.model.game.Game;
 
 public abstract class GameBuilder<E> {
 	

@@ -1,17 +1,16 @@
 package game.controller.state;
 
-import game.controller.GameController;
-import game.controller.exception.move.InvallidJuniorGardenerFlowerSquareException;
-import game.model.GameStatus;
+import game.controller.exception.move.InvalidJuniorGardenerFlowerSquareException;
 import game.model.board.Square;
 import game.model.flower.Flower;
+import game.model.game.GameStatus;
 import game.model.gardener.GardenerColor;
 import game.model.nenufar.Nenufar;
 import game.model.nenufar.NenufarSide;
 
-public class JuniorGardenerFlowerSquare extends AbstractControllerState {
+public class JuniorGardenerFlowerSquare extends AbstractPontuableState {
 
-	public JuniorGardenerFlowerSquare(GameController gameController) {
+	public JuniorGardenerFlowerSquare(GameControllerStateAccess gameController) {
 		super(gameController);
 	}
 	
@@ -21,7 +20,7 @@ public class JuniorGardenerFlowerSquare extends AbstractControllerState {
 			moveJuniorGardenerFlowerToSquare(row, column);
 			goToNextStep();
 		} else {
-			throw new InvallidJuniorGardenerFlowerSquareException();
+			throw new InvalidJuniorGardenerFlowerSquareException();
 		}
 	}
 
@@ -41,13 +40,10 @@ public class JuniorGardenerFlowerSquare extends AbstractControllerState {
 		GardenerColor color 	= gameController.getCurrentTurn().getJuniorGardenerColor();
 		gameController.moveGardenerFlowerToSquare(square, flower, color);
 	}
-
-	private void goToNextStep() {
-		//if(false) { //Fez pontuação
-		//	//TODO
-		//} else {
+	
+	@Override
+	protected void defaultStateChange() {
 		gameController.setState(new SeniorGardenerFlowerSquare(gameController));
-		//}
 	}
 	
 }

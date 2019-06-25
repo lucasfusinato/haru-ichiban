@@ -70,6 +70,7 @@ public abstract class Nenufar implements Element {
 
 	public void resetElement() {
 		element = createDefaultElement();
+		activeTopSide();
 	}
 
 	protected Element createDefaultElement() {

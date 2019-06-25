@@ -1,11 +1,10 @@
 package game.controller.state;
 
-import game.controller.GameController;
-import game.model.GameStatus;
+import game.model.game.GameStatus;
 
-public class SeniorGardenerDarkenedFrogSquare extends AbstractControllerState {
+public class SeniorGardenerDarkenedFrogSquare extends AbstractEndFlowState {
 
-	public SeniorGardenerDarkenedFrogSquare(GameController gameController) {
+	public SeniorGardenerDarkenedFrogSquare(GameControllerStateAccess gameController) {
 		super(gameController);
 	}
 	
