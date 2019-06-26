@@ -4,11 +4,11 @@ import game.model.board.Board;
 import game.model.board.Square;
 import game.model.game.GameStatus;
 import game.model.nenufar.Nenufar;
-import game.model.strategy.move.HaruIchibanDownMoveStrategy;
-import game.model.strategy.move.HaruIchibanLeftMoveStrategy;
-import game.model.strategy.move.HaruIchibanMoveStrategy;
-import game.model.strategy.move.HaruIchibanRightMoveStrategy;
-import game.model.strategy.move.HaruIchibanUpMoveStrategy;
+import game.model.strategy.move.DownMoveStrategy;
+import game.model.strategy.move.LeftMoveStrategy;
+import game.model.strategy.move.MoveStrategy;
+import game.model.strategy.move.RightMoveStrategy;
+import game.model.strategy.move.UpMoveStrategy;
 
 public class JuniorGardenerHaruIchiban extends AbstractPontuableState {
 
@@ -56,7 +56,7 @@ public class JuniorGardenerHaruIchiban extends AbstractPontuableState {
 	}
 	
 	private void callHaruIchiban(Square<Nenufar> square) {
-		HaruIchibanMoveStrategy strategy = getHaruIchibanMoveStrategy(square);
+		MoveStrategy strategy = getHaruIchibanMoveStrategy(square);
 		if(strategy != null) {
 			Board<Nenufar> currentBoard = gameController.getCurrentBoard();
 			Square<Nenufar> selectedSquare = gameController.getSelectedSquare();
@@ -80,26 +80,26 @@ public class JuniorGardenerHaruIchiban extends AbstractPontuableState {
 		gameController.setSelectedSquare(square);
 	}
 
-	private HaruIchibanMoveStrategy getHaruIchibanMoveStrategy(int rowIndex, int columnIndex) {
+	private MoveStrategy getHaruIchibanMoveStrategy(int rowIndex, int columnIndex) {
 		return getHaruIchibanMoveStrategy(gameController.getCurrentBoard().getSquare(rowIndex, columnIndex));
 	}
 
-	private HaruIchibanMoveStrategy getHaruIchibanMoveStrategy(Square<Nenufar> square) {
-		HaruIchibanMoveStrategy strategy = null;
+	private MoveStrategy getHaruIchibanMoveStrategy(Square<Nenufar> square) {
+		MoveStrategy strategy = null;
 		Square<Nenufar> selectedSquare = gameController.getSelectedSquare();
 		if(selectedSquare != null) {
 			if(square != selectedSquare && square.getElement() == null) {
 				if(selectedSquare.getRow() == square.getRow()) {
 					if(square.getColumn() < selectedSquare.getColumn()) {
-						strategy = new HaruIchibanLeftMoveStrategy();
+						strategy = new LeftMoveStrategy();
 					} else if(square.getColumn() > selectedSquare.getColumn()) {
-						strategy = new HaruIchibanRightMoveStrategy();
+						strategy = new RightMoveStrategy();
 					}
 				} else if(selectedSquare.getColumn() == square.getColumn()) {
 					if(square.getRow() < selectedSquare.getRow()) {
-						strategy = new HaruIchibanUpMoveStrategy();
+						strategy = new UpMoveStrategy();
 					} else if(square.getRow() > selectedSquare.getRow()) {
-						strategy = new HaruIchibanDownMoveStrategy();
+						strategy = new DownMoveStrategy();
 					}
 				}
 				strategy = (canUseMoveStrategy(strategy, square)) ? strategy : null;
@@ -108,7 +108,7 @@ public class JuniorGardenerHaruIchiban extends AbstractPontuableState {
 		return strategy;
 	}
 
-	private boolean canUseMoveStrategy(HaruIchibanMoveStrategy strategy, Square<Nenufar> square) {
+	private boolean canUseMoveStrategy(MoveStrategy strategy, Square<Nenufar> square) {
 		if(strategy != null) {
 			Board<Nenufar> currentBoard = gameController.getCurrentBoard();
 			Square<Nenufar> selectedSquare = gameController.getSelectedSquare();

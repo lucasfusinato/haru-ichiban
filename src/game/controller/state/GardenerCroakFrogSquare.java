@@ -7,11 +7,11 @@ import game.model.frog.Frog;
 import game.model.game.GameStatus;
 import game.model.gardener.GardenerColor;
 import game.model.nenufar.Nenufar;
-import game.model.strategy.nenufar.CompareEmptyNenufarStrategy;
-import game.model.strategy.nenufar.CompareLightedNenufarSideStrategy;
-import game.model.strategy.nenufar.CompareNenufarStrategy;
-import game.model.strategy.nenufar.CompareRedFrogNenufarStrategy;
-import game.model.strategy.nenufar.CompareYellowFrogNenufarStrategy;
+import game.model.strategy.square.CompareEmptyNenufarStrategy;
+import game.model.strategy.square.CompareLightedNenufarSideStrategy;
+import game.model.strategy.square.CompareNenufarStrategy;
+import game.model.strategy.square.CompareRedFrogNenufarStrategy;
+import game.model.strategy.square.CompareYellowFrogNenufarStrategy;
 import game.model.visitor.BoardFindNenufarVisitor;
 import game.model.visitor.CountNenufarVisitor;
 

@@ -10,6 +10,8 @@ import game.controller.GameControllerInterface;
 import game.view.flowerselection.YellowFlowerSelectionPanel;
 import game.view.flowerwithdraw.YellowFlowerWithdrawDialog;
 import game.view.gardener.listener.YellowCroakActionListener;
+import game.view.itemselection.AbstractItemSelectionPanel;
+import game.view.itemselection.YellowGardenerItemSelectionPanel;
 
 @SuppressWarnings("serial")
 public class YellowGardenerPanel extends AbstractGardenerPanel {
@@ -20,7 +22,7 @@ public class YellowGardenerPanel extends AbstractGardenerPanel {
 
 	@Override
 	protected Component getLeftComponent() {
-		return createFlowerSelectionAndCroakButtonPanel();
+		return createGardenerOptionsPanel();
 	}
 
 	@Override
@@ -51,6 +53,10 @@ public class YellowGardenerPanel extends AbstractGardenerPanel {
 	@Override
 	protected ActionListener getCroakActionListener() {
 		return new YellowCroakActionListener(getGameController());
+	}
+	@Override
+	protected AbstractItemSelectionPanel createItemSelectionPanel() {
+		return new YellowGardenerItemSelectionPanel(getGameController());
 	}
 
 }

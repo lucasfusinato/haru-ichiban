@@ -19,7 +19,7 @@ public class Board<E> {
 		this.cells = new Square[ROWS][COLS];
 		for(int i = 0; i < this.cells.length; i++) {
 			for(int j = 0; j < this.cells[i].length; j++) {
-				this.cells[i][j] = new Square<>(i, j);
+				this.cells[i][j] = new Square<>(this, i, j);
 			}	
 		}
 	}

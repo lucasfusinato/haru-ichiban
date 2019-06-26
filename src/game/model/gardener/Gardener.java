@@ -1,13 +1,15 @@
 package game.model.gardener;
 
-import game.model.Player;
+import game.model.board.Square;
+import game.model.flower.Flower;
+import game.model.nenufar.Nenufar;
 
-public abstract class Gardener extends Player {
-	
-	public Gardener(String name) {
-		super(name);
-	}
-	
-	public abstract GardenerColor getColor();
+public interface Gardener {
 
+	GardenerColor getColor();
+	
+	String getName();
+	
+	void florescer(Square<Nenufar> nenufar, Flower flower);
+	
 }

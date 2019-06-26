@@ -1,5 +1,7 @@
 package game.controller.state;
 
+import java.util.List;
+
 import game.model.Element;
 import game.model.board.Board;
 import game.model.board.Square;
@@ -10,6 +12,7 @@ import game.model.game.Round;
 import game.model.game.Turn;
 import game.model.gardener.Gardener;
 import game.model.gardener.GardenerColor;
+import game.model.gardener.GardenerItem;
 import game.model.nenufar.Nenufar;
 
 public interface GameControllerStateAccess {
@@ -97,5 +100,19 @@ public interface GameControllerStateAccess {
 	void cancelCroak();
 
 	Gardener getCroakGardener();
+
+	void addYellowGardenerItem(GardenerItem gardenerItem);
+
+	void addRedGardenerItem(GardenerItem gardenerItem);
+
+	void removeRedGardenerItems();
+
+	void removeYellowGardenerItems();
+
+	List<GardenerItem> getGameYellowGardenerItems();
+
+	List<GardenerItem> getGameRedGardenerItems();
+
+	void blockItems(boolean b);
 
 }

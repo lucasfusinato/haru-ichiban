@@ -3,6 +3,8 @@ package game.model.builder.game;
 import game.model.board.Board;
 import game.model.factory.RedGardenerFactory;
 import game.model.factory.YellowGardenerFactory;
+import game.model.gardener.AbstractGardener;
+import game.model.gardener.GardenerItem;
 import game.model.nenufar.Nenufar;
 
 public abstract class NenufarGameBuilder extends GameBuilder<Nenufar> {
@@ -25,12 +27,26 @@ public abstract class NenufarGameBuilder extends GameBuilder<Nenufar> {
 
 	@Override
 	protected void definePlayer1(String playerName) {
-		getGame().setRedGardener(RedGardenerFactory.getInstance().createGardener(playerName));
+		AbstractGardener gardener = RedGardenerFactory.getInstance().createGardener(playerName);
+		getGame().setRedGardener(gardener);
+		defineRedGardenerItens();
 	}
 
 	@Override
 	protected void definePlayer2(String playerName) {
-		getGame().setYellowGardener(YellowGardenerFactory.getInstance().createGardener(playerName));
+		AbstractGardener gardener = YellowGardenerFactory.getInstance().createGardener(playerName);
+		getGame().setYellowGardener(gardener);
+		defineYellowGardenerItens();
+	}
+
+	protected void defineRedGardenerItens() {
+		getGame().addRedGardenerItem(GardenerItem.SPRAY);
+		getGame().addRedGardenerItem(GardenerItem.VENENO);
+	}
+
+	protected void defineYellowGardenerItens() {
+		getGame().addYellowGardenerItem(GardenerItem.SPRAY);
+		getGame().addYellowGardenerItem(GardenerItem.VENENO);
 	}
 
 	protected abstract int getBoardRows();

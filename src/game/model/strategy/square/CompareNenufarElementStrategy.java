@@ -1,4 +1,4 @@
-package game.model.strategy.nenufar;
+package game.model.strategy.square;
 
 import game.model.Element;
 import game.model.board.Square;

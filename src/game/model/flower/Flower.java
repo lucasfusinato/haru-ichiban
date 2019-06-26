@@ -13,5 +13,10 @@ public abstract class Flower implements Element, Cloneable {
 	public int getNumber() {
 		return number;
 	}
+	
+	@Override
+	public Flower clone() throws CloneNotSupportedException {
+		return (Flower) super.clone();
+	}
 
 }

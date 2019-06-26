@@ -2,7 +2,7 @@ package game.model.visitor;
 
 import game.model.board.Board;
 import game.model.nenufar.Nenufar;
-import game.model.strategy.nenufar.CompareNenufarStrategy;
+import game.model.strategy.square.CompareNenufarStrategy;
 
 public class CountNenufarVisitor implements BoardVisitor<Nenufar> {
 

@@ -3,7 +3,7 @@ package game.model.visitor;
 import game.model.board.Board;
 import game.model.board.Square;
 import game.model.nenufar.Nenufar;
-import game.model.strategy.nenufar.CompareNenufarElementStrategy;
+import game.model.strategy.square.CompareNenufarElementStrategy;
 
 public class RemoveNenufarElementVisitor implements BoardVisitor<Nenufar> {
 

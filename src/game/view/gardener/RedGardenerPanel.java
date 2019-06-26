@@ -10,6 +10,8 @@ import game.controller.GameControllerInterface;
 import game.view.flowerselection.RedFlowerSelectionPanel;
 import game.view.flowerwithdraw.RedFlowerWithdrawDialog;
 import game.view.gardener.listener.RedCroakActionListener;
+import game.view.itemselection.AbstractItemSelectionPanel;
+import game.view.itemselection.RedGardenerItemSelectionPanel;
 
 @SuppressWarnings("serial")
 public class RedGardenerPanel extends AbstractGardenerPanel {
@@ -25,7 +27,7 @@ public class RedGardenerPanel extends AbstractGardenerPanel {
 
 	@Override
 	protected Component getRightComponent() {
-		return createFlowerSelectionAndCroakButtonPanel();
+		return createGardenerOptionsPanel();
 	}
 
 	@Override
@@ -51,6 +53,11 @@ public class RedGardenerPanel extends AbstractGardenerPanel {
 	@Override
 	protected ActionListener getCroakActionListener() {
 		return new RedCroakActionListener(getGameController());
+	}
+
+	@Override
+	protected AbstractItemSelectionPanel createItemSelectionPanel() {
+		return new RedGardenerItemSelectionPanel(getGameController());
 	}
 
 }

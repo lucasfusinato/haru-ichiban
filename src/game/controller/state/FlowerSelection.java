@@ -1,9 +1,11 @@
 package game.controller.state;
 
+
 import game.controller.exception.move.AlreadySelectedRedFlowerException;
 import game.controller.exception.move.AlreadySelectedYellowFlowerException;
 import game.model.game.GameStatus;
 import game.model.gardener.Gardener;
+import game.model.gardener.GardenerItem;
 
 public class FlowerSelection extends AbstractControllerState {
 
@@ -16,6 +18,13 @@ public class FlowerSelection extends AbstractControllerState {
 		if(newTurn) {
 			gameController.goToNextTurn();
 		}
+		removeGardenersItems();
+		gameController.blockItems(false);
+	}
+
+	private void removeGardenersItems() {
+		gameController.removeRedGardenerItems();
+		gameController.removeYellowGardenerItems();
 	}
 
 	@Override
@@ -65,6 +74,16 @@ public class FlowerSelection extends AbstractControllerState {
 			gameController.setVisibleYellowFlowerNumber(gameController.getCurrentTurn().getYellowFlower(index));
 		}
 	}
+	
+	@Override
+	public void equiparYellowGardener(int item) {
+		gameController.addYellowGardenerItem(GardenerItem.getByNumber(item));
+	}
+	
+	@Override
+	public void equiparRedGardener(int item) {
+		gameController.addRedGardenerItem(GardenerItem.getByNumber(item));
+	}
 
 	@Override
 	public GameStatus getStatus() {
@@ -72,6 +91,7 @@ public class FlowerSelection extends AbstractControllerState {
 	}
 
 	private void defineGardeners() {
+		gameController.blockItems(true);
 		int redNumber = gameController.getTurnSelectedRedNumber();
 		int yellowNumber = gameController.getTurnSelectedYellowNumber();
 		if(redNumber > yellowNumber) {

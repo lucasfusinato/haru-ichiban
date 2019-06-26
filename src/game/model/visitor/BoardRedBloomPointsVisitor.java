@@ -1,6 +1,6 @@
 package game.model.visitor;
 
-import game.model.strategy.nenufar.CompareRedFlowerNenufarStrategy;
+import game.model.strategy.square.CompareRedFlowerNenufarStrategy;
 
 public class BoardRedBloomPointsVisitor extends BoardBloomPointsVisitor {
 

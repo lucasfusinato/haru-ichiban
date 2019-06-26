@@ -1,5 +1,7 @@
 package game.controller;
 
+import java.util.List;
+
 import game.model.game.GameStatus;
 
 public interface GameControllerInterface {
@@ -111,5 +113,15 @@ public interface GameControllerInterface {
 	void redGardenerCroak() throws Exception;
 
 	void yellowGardenerCroak() throws Exception;
+
+	void equiparYellowGardener(int item) throws Exception;
+
+	void equiparRedGardener(int item) throws Exception;
+
+	List<Integer> getYellowItemsToSelection();
+
+	String getItemDescription(Integer item);
+
+	List<Integer> getRedItemsToSelection();
 
 }

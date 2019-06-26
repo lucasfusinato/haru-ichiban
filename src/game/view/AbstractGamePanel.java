@@ -142,4 +142,31 @@ public abstract class AbstractGamePanel extends JPanel implements GameController
 	public void requestMoveYellowFrog() {
 		JOptionPane.showMessageDialog(null, "Selecione uma casa para o sapo amarelo.");
 	}
+
+	@Override
+	public void updateRedItems() {
+		redGardenerPanel.refreshItems();
+	}
+
+	@Override
+	public void redPlayerUsedItem(String item) {
+		JOptionPane.showMessageDialog(null, "O jardineiro vermelho está equipado com o item "+item+" até o próximo turno.");
+	}
+
+	@Override
+	public void yellowPlayerUsedItem(String item) {
+		JOptionPane.showMessageDialog(null, "O jardineiro amarelo está equipado com o item "+item+" até o próximo turno.");
+	}
+
+	@Override
+	public void updateYellowItems() {
+		yellowGardenerPanel.refreshItems();
+	}
+	
+	@Override
+	public void blockItems(boolean b) {
+		redGardenerPanel.blockItems(b);
+		yellowGardenerPanel.blockItems(b);
+	}
+	
 }

@@ -1,6 +1,6 @@
 package game.model.gardener;
 
-public class RedGardener extends Gardener {
+public class RedGardener extends AbstractGardener {
 
 	public RedGardener(String name) {
 		super(name);

@@ -1,10 +1,15 @@
 package game.controller.state;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import game.controller.exception.move.InvalidSeniorGardenerDarkenedNenufarTimeException;
+import game.controller.exception.time.InvalidEquiparJardineiroTimeException;
 import game.controller.exception.time.InvalidHaruIchibanTimeException;
 import game.controller.exception.time.InvalidJuniorGardenerFlowerTimeException;
 import game.controller.exception.time.InvlidRedCroakTimeException;
 import game.model.game.GameStatus;
+import game.model.gardener.GardenerItem;
 import game.model.nenufar.Nenufar;
 import game.controller.exception.time.InvalidRedFlowerTimeException;
 import game.controller.exception.time.InvalidSeniorGardenerFlowerTimeException;
@@ -102,11 +107,6 @@ public abstract class AbstractControllerState {
 	public boolean canWithdrawYellowFlowerAt(int index) {
 		return false;
 	}
-
-	@Override
-	public String toString() {
-		return getStatus().getDescription();
-	}
 	
 	public String getStatusDescription() {
 		return getStatus().getDescription();
@@ -132,7 +132,40 @@ public abstract class AbstractControllerState {
 		}
 		return element;
 	}
+
+	public void equiparRedGardener(int item) throws Exception {
+		throw new InvalidEquiparJardineiroTimeException(toString());
+	}
+
+	public void equiparYellowGardener(int item) throws Exception {
+		throw new InvalidEquiparJardineiroTimeException(toString());
+	}
 	
 	public abstract GameStatus getStatus();
+
+	@Override
+	public String toString() {
+		return getStatus().getDescription();
+	}
+
+	public List<Integer> getYellowItemsToSelection() {
+		List<Integer> items = new ArrayList<>();
+		for(GardenerItem item : gameController.getGameYellowGardenerItems()) {
+			items.add(item.ordinal());
+		}
+		return items;
+	}
+
+	public String getItemDescription(Integer item) {
+		return GardenerItem.getByNumber(item).getDescription();
+	}
+
+	public List<Integer> getRedItemsToSelection() {
+		List<Integer> items = new ArrayList<>();
+		for(GardenerItem item : gameController.getGameRedGardenerItems()) {
+			items.add(item.ordinal());
+		}
+		return items;
+	}
 		
 }

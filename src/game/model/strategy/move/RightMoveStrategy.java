@@ -2,21 +2,21 @@ package game.model.strategy.move;
 
 import game.model.Direction;
 
-public class HaruIchibanDownMoveStrategy implements HaruIchibanMoveStrategy {
+public class RightMoveStrategy implements MoveStrategy {
 
 	@Override
 	public int calculateNextRow(int i) {
-		return i - 1;
+		return i;
 	}
 
 	@Override
 	public int calculateNextColumn(int j) {
-		return j;
+		return j - 1;
 	}
 
 	@Override
 	public Direction getDirection() {
-		return Direction.DOWN;
+		return Direction.RIGHT;
 	}
 
 }

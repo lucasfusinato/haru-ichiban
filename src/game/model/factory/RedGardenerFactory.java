@@ -4,7 +4,7 @@ import game.model.flower.Flower;
 import game.model.flower.RedFlower;
 import game.model.frog.Frog;
 import game.model.frog.RedFrog;
-import game.model.gardener.Gardener;
+import game.model.gardener.AbstractGardener;
 import game.model.gardener.RedGardener;
 
 public class RedGardenerFactory extends AbstractGardenerFactory {
@@ -19,7 +19,7 @@ public class RedGardenerFactory extends AbstractGardenerFactory {
 	}
 
 	@Override
-	public Gardener createGardener(String name) {
+	public AbstractGardener createGardener(String name) {
 		return new RedGardener(name);
 	}
 

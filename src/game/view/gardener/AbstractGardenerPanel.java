@@ -17,12 +17,14 @@ import javax.swing.border.Border;
 import game.controller.GameControllerInterface;
 import game.view.flowerselection.AbstractFlowerSelectionPanel;
 import game.view.flowerwithdraw.AbstractFlowerWithdrawDialog;
+import game.view.itemselection.AbstractItemSelectionPanel;
 import utils.view.ResizedImageIconFactory;
 
 @SuppressWarnings("serial")
 public abstract class AbstractGardenerPanel extends JPanel {
 
 	private GameControllerInterface gameController;
+	private AbstractItemSelectionPanel itemSelectionPanel;
 	private AbstractFlowerSelectionPanel flowerSelectionPanel;
 	private JLabel gardenerImageLabel;
 	private AbstractFlowerWithdrawDialog flowerWithdrawDialog;
@@ -44,6 +46,7 @@ public abstract class AbstractGardenerPanel extends JPanel {
 		this.flowerSelectionPanel = createFlowerSelectionPanel();
 		this.gardenerImageLabel = createGardenerImageLabel();
 		this.croakButton = createCroakButton();
+		this.itemSelectionPanel = createItemSelectionPanel();
 		this.flowerWithdrawDialog = createFlowerWithdrawDialog();
 	}
 
@@ -80,6 +83,7 @@ public abstract class AbstractGardenerPanel extends JPanel {
 	
 	protected abstract Component getLeftComponent();
 	protected abstract Component getRightComponent();
+	protected abstract AbstractItemSelectionPanel createItemSelectionPanel();
 	protected abstract AbstractFlowerSelectionPanel createFlowerSelectionPanel();
 	protected abstract String getGardenerImagePath();
 	protected abstract Border createPanelBorder();
@@ -103,18 +107,24 @@ public abstract class AbstractGardenerPanel extends JPanel {
 		return flowerSelectionPanel;
 	}
 
-	protected Component createFlowerSelectionAndCroakButtonPanel() {
+	protected Component createGardenerOptionsPanel() {
 		JPanel panel = new JPanel();
 		panel.setOpaque(false);
 		panel.setLayout(new GridBagLayout());
 		
 		GridBagConstraints cons;
+		
 		cons = new GridBagConstraints();
 		cons.gridy = 0;
 		panel.add(flowerSelectionPanel, cons);
-
+		
 		cons = new GridBagConstraints();
 		cons.gridy = 1;
+		panel.add(itemSelectionPanel, cons);
+		itemSelectionPanel.setVisible(false);
+
+		cons = new GridBagConstraints();
+		cons.gridy = 2;
 		panel.add(croakButton, cons);
 		
 		return panel;
@@ -151,6 +161,14 @@ public abstract class AbstractGardenerPanel extends JPanel {
 	
 	public void hideCroakButton() {
 		croakButton.setVisible(false);
+	}
+
+	public void refreshItems() {
+		itemSelectionPanel.refreshItems();
+	}
+
+	public void blockItems(boolean b) {
+		itemSelectionPanel.blockItems(b);
 	}
 	
 }

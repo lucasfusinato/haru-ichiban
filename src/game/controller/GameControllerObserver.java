@@ -36,4 +36,14 @@ public interface GameControllerObserver {
 
 	void requestMoveYellowFrog();
 
+	void updateRedItems();
+
+	void updateYellowItems();
+
+	void redPlayerUsedItem(String item);
+
+	void yellowPlayerUsedItem(String item);
+
+	void blockItems(boolean b);
+
 }

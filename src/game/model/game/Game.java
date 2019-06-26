@@ -4,37 +4,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.model.board.Board;
-import game.model.gardener.Gardener;
+import game.model.gardener.AbstractGardener;
+import game.model.gardener.GardenerItem;
 
 public class Game<E> extends GameStep {
 
-	private Gardener redGardener;
-	private Gardener yellowGardener;
+	private AbstractGardener redGardener;
+	private AbstractGardener yellowGardener;
+	private List<GardenerItem> redGardenerItens;
+	private List<GardenerItem> yellowGardenerItens;
 	private List<GameStep> steps;
 	private int roundTurnLimit;
 	private Board<E> board;
 
 	public Game() {
 		steps = new ArrayList<>();
+		redGardenerItens = new ArrayList<>();
+		yellowGardenerItens = new ArrayList<>();
 	}
 
 	public void addRound(GameStep round) {
 		steps.add(round);
 	}
 
-	public Gardener getRedGardener() {
+	public AbstractGardener getRedGardener() {
 		return redGardener;
 	}
 
-	public void setRedGardener(Gardener redGardener) {
+	public void setRedGardener(AbstractGardener redGardener) {
 		this.redGardener = redGardener;
 	}
 
-	public Gardener getYellowGardener() {
+	public AbstractGardener getYellowGardener() {
 		return yellowGardener;
 	}
 
-	public void setYellowGardener(Gardener yellowGardener) {
+	public void setYellowGardener(AbstractGardener yellowGardener) {
 		this.yellowGardener = yellowGardener;
 	}
 
@@ -60,6 +65,40 @@ public class Game<E> extends GameStep {
 
 	public void setBoard(Board<E> board) {
 		this.board = board;
+	}
+
+	public void addRedGardenerItem(GardenerItem item) {
+		redGardenerItens.add(item);
+	}
+
+	public void addYellowGardenerItem(GardenerItem item) {
+		yellowGardenerItens.add(item);
+	}
+	
+	public GardenerItem removeRedGardenerItem(GardenerItem item) {
+		GardenerItem removed = null;
+		int index = redGardenerItens.indexOf(item);
+		if(index >= 0) {
+			removed = redGardenerItens.remove(index);
+		}
+		return removed;
+	}
+	
+	public GardenerItem removeYellowGardenerItem(GardenerItem item) {
+		GardenerItem removed = null;
+		int index = yellowGardenerItens.indexOf(item);
+		if(index >= 0) {
+			removed = yellowGardenerItens.remove(index);
+		}
+		return removed;
+	}
+	
+	public List<GardenerItem> getRedGardenerItens() {
+		return redGardenerItens;
+	}
+	
+	public List<GardenerItem> getYellowGardenerItens() {
+		return yellowGardenerItens;
 	}
 
 	@Override

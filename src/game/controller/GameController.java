@@ -7,6 +7,8 @@ import java.util.List;
 
 import game.model.board.Board;
 import game.model.board.Square;
+import game.model.decorator.GardenerSprayDecorator;
+import game.model.decorator.GardenerVenenoDecorator;
 import game.model.factory.AbstractGardenerFactory;
 import game.model.factory.RedGardenerFactory;
 import game.model.factory.YellowGardenerFactory;
@@ -18,10 +20,11 @@ import game.model.game.Round;
 import game.model.game.Turn;
 import game.model.gardener.Gardener;
 import game.model.gardener.GardenerColor;
+import game.model.gardener.GardenerItem;
 import game.model.nenufar.Nenufar;
-import game.model.strategy.nenufar.CompareNonFloweredNenufarStrategy;
-import game.model.strategy.nenufar.CompareRedFrogNenufarStrategy;
-import game.model.strategy.nenufar.CompareYellowFrogNenufarStrategy;
+import game.model.strategy.square.CompareNonFloweredNenufarStrategy;
+import game.model.strategy.square.CompareRedFrogNenufarStrategy;
+import game.model.strategy.square.CompareYellowFrogNenufarStrategy;
 import game.model.visitor.CountNenufarVisitor;
 import game.model.visitor.RemoveNenufarElementVisitor;
 import game.model.visitor.ResetBoardElementVisitor;
@@ -43,6 +46,8 @@ public class GameController implements GameControllerInterface, GameControllerSt
 	private Frog currentFrog;
 	private AbstractControllerState state;
 	private Gardener croakGardener;
+	private List<GardenerItem> redGardenerItems;
+	private List<GardenerItem> yellowGardenerItems;
 
 	public GameController() {
 		init();
@@ -59,6 +64,8 @@ public class GameController implements GameControllerInterface, GameControllerSt
 		visibleYellowFlowerNumber 	= null;
 		currentFrog					= null;
 		croakGardener				= null;
+		redGardenerItems			= new ArrayList<>();
+		yellowGardenerItems			= new ArrayList<>();
 		setState(new UnitializedGame(this));
 	}
 
@@ -152,6 +159,16 @@ public class GameController implements GameControllerInterface, GameControllerSt
 		return state.getBoardInfoAt(rowIndex, columnIndex);
 	}
 
+	@Override
+	public void equiparRedGardener(int item) throws Exception {
+		state.equiparRedGardener(item);
+	}
+
+	@Override
+	public void equiparYellowGardener(int item) throws Exception {
+		state.equiparYellowGardener(item);
+	}
+	
 	@Override
 	public int getAvailableRedFlowerQuantity() {
 		return AVAILABLE_SELECT_FLOWERS;
@@ -358,6 +375,21 @@ public class GameController implements GameControllerInterface, GameControllerSt
 	}
 
 	@Override
+	public List<Integer> getYellowItemsToSelection() {
+		return state.getYellowItemsToSelection();
+	}
+
+	@Override
+	public String getItemDescription(Integer item) {
+		return state.getItemDescription(item);
+	}
+
+	@Override
+	public List<Integer> getRedItemsToSelection() {
+		return state.getRedItemsToSelection();
+	}
+
+	@Override
 	public Flower removeRoundWithdrawRedFlower(int index) {
 		Flower flower = currentStep.removeWithdrawRedFlower(index);
 		notifyUpdatedWithdrawRedFlowers();
@@ -433,13 +465,14 @@ public class GameController implements GameControllerInterface, GameControllerSt
 		return currentTurn.getSelectedYellowNumber();
 	}
 
+	@Override
 	public Gardener getRedGardener() {
-		return game.getRedGardener();
+		return addGardenerDecoration(game.getRedGardener(), redGardenerItems);
 	}
 
 	@Override
 	public Gardener getYellowGardener() {
-		return game.getYellowGardener();
+		return addGardenerDecoration(game.getYellowGardener(), yellowGardenerItems);
 	}
 
 	@Override
@@ -464,8 +497,7 @@ public class GameController implements GameControllerInterface, GameControllerSt
 	@Override
 	public void moveGardenerFlowerToSquare(Square<Nenufar> square, Flower flower, GardenerColor color) {
 		currentTurn.removeFlower(flower, color);
-		currentBoard.getElementAtSquare(square).setElement(flower);
-		currentBoard.getElementAtSquare(square).activeTopSide();
+		getGardenerByColor(color).florescer(square, flower);
 		checkRemoveFrogs();
 		notifyUpdatedFlowers(color);
 		notifyUpdatedBoard();
@@ -583,6 +615,62 @@ public class GameController implements GameControllerInterface, GameControllerSt
 	public Gardener getCroakGardener() {
 		return croakGardener;
 	}
+	
+	@Override
+	public void addYellowGardenerItem(GardenerItem gardenerItem) {
+		GardenerItem item = game.removeYellowGardenerItem(gardenerItem);
+		if(item != null) {
+			yellowGardenerItems.add(item);
+			notifyUsedYellowGardenerItem(item.getDescription());
+		}
+	}
+
+	@Override
+	public void addRedGardenerItem(GardenerItem gardenerItem) {
+		GardenerItem item = game.removeRedGardenerItem(gardenerItem);
+		if(item != null) {
+			redGardenerItems.add(item);
+			notifyUsedRedGardenerItem(item.getDescription());
+		}
+	}
+
+	@Override
+	public void removeRedGardenerItems() {
+		redGardenerItems = new ArrayList<>();
+	}
+
+	@Override
+	public void removeYellowGardenerItems() {
+		yellowGardenerItems = new ArrayList<>();
+	}
+	
+	@Override
+	public void addScore(int redPlayer, int yellowPlayer) {
+		currentStep.addRedPoints(redPlayer);
+		currentStep.addYellowPoints(yellowPlayer);
+		notifyUpdatedScore(redPlayer, yellowPlayer);
+	}
+
+	@Override
+	public List<GardenerItem> getGameYellowGardenerItems() {
+		return game.getYellowGardenerItens();
+	}
+
+	@Override
+	public List<GardenerItem> getGameRedGardenerItems() {
+		return game.getRedGardenerItens();
+	}
+
+	@Override
+	public void blockItems(boolean b) {
+		for(GameControllerObserver observer : observers) {
+			observer.blockItems(b);
+		}
+	}
+
+	private Gardener getGardenerByColor(GardenerColor color) {
+		return (color == GardenerColor.RED) ? getRedGardener() : getYellowGardener();
+	}
 
 	private boolean withdrawedRedFlowers() {
 		return currentTurn.getRedFlowers().size() == AVAILABLE_SELECT_FLOWERS;
@@ -672,6 +760,20 @@ public class GameController implements GameControllerInterface, GameControllerSt
 		}
 	}
 
+	protected void notifyUsedYellowGardenerItem(String item) {
+		for(GameControllerObserver observer : observers) {
+			observer.yellowPlayerUsedItem(item);
+			observer.updateYellowItems();
+		}
+	}
+
+	protected void notifyUsedRedGardenerItem(String item) {
+		for(GameControllerObserver observer : observers) {
+			observer.redPlayerUsedItem(item);
+			observer.updateRedItems();
+		}
+	}
+
 	protected void notifyUpdatedFlowers(GardenerColor color) {
 		switch(color) {
 			case RED:
@@ -684,11 +786,21 @@ public class GameController implements GameControllerInterface, GameControllerSt
 				break;
 		}
 	}
-	
-	public void addScore(int redPlayer, int yellowPlayer) {
-		currentStep.addRedPoints(redPlayer);
-		currentStep.addYellowPoints(yellowPlayer);
-		notifyUpdatedScore(redPlayer, yellowPlayer);
+
+	private Gardener addGardenerDecoration(Gardener gardener, List<GardenerItem> items) {
+		for(GardenerItem item : items) {
+			switch(item) {
+			case SPRAY:
+				gardener = new GardenerSprayDecorator(gardener);
+				break;
+			case VENENO:
+				gardener = new GardenerVenenoDecorator(gardener);
+				break;
+			default:
+				break;
+			}
+		}
+		return gardener;
 	}
 
 	protected void notifyUpdatedScore(int addedScore1, int addedScore2) {

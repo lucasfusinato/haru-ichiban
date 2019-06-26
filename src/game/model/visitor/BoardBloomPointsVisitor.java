@@ -8,7 +8,7 @@ import game.model.strategy.bloom.HorizontalNenufarBloomStrategy;
 import game.model.strategy.bloom.LeftNenufarBloomStrategy;
 import game.model.strategy.bloom.RightNenufarBloomStrategy;
 import game.model.strategy.bloom.VerticalNenufarBloomStrategy;
-import game.model.strategy.nenufar.CompareNenufarElementStrategy;
+import game.model.strategy.square.CompareNenufarElementStrategy;
 
 public class BoardBloomPointsVisitor implements BoardVisitor<Nenufar> {
 
