@@ -7,8 +7,6 @@ import java.util.List;
 
 import game.model.board.Board;
 import game.model.board.Square;
-import game.model.decorator.GardenerSprayDecorator;
-import game.model.decorator.GardenerVenenoDecorator;
 import game.model.factory.AbstractGardenerFactory;
 import game.model.factory.RedGardenerFactory;
 import game.model.factory.YellowGardenerFactory;
@@ -21,6 +19,8 @@ import game.model.game.Turn;
 import game.model.gardener.Gardener;
 import game.model.gardener.GardenerColor;
 import game.model.gardener.GardenerItem;
+import game.model.gardener.decorator.GardenerPulverizadorDecorator;
+import game.model.gardener.decorator.GardenerTesouraPodaDecorator;
 import game.model.nenufar.Nenufar;
 import game.model.strategy.square.CompareNonFloweredNenufarStrategy;
 import game.model.strategy.square.CompareRedFrogNenufarStrategy;
@@ -506,7 +506,7 @@ public class GameController implements GameControllerInterface, GameControllerSt
 	@Override
 	public void goToNextRound() {
 		currentStep = createRound();
-		game.addRound(currentStep);
+		game.addStep(currentStep);
 		clearBoard();
 		notifyStartedRound();
 		currentTurn = null;
@@ -790,11 +790,11 @@ public class GameController implements GameControllerInterface, GameControllerSt
 	private Gardener addGardenerDecoration(Gardener gardener, List<GardenerItem> items) {
 		for(GardenerItem item : items) {
 			switch(item) {
-			case SPRAY:
-				gardener = new GardenerSprayDecorator(gardener);
+			case PULVERIZADOR:
+				gardener = new GardenerPulverizadorDecorator(gardener);
 				break;
-			case VENENO:
-				gardener = new GardenerVenenoDecorator(gardener);
+			case TESOURA_PODA:
+				gardener = new GardenerTesouraPodaDecorator(gardener);
 				break;
 			default:
 				break;

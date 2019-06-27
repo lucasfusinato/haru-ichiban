@@ -1,9 +1,9 @@
 package game.model.game;
 
-public abstract class GameStep {
+public interface GameStep {
 
-	public abstract int getRedPoints();
+	int getRedPoints();
 	
-	public abstract int getYellowPoints();
+	int getYellowPoints();
 	
 }

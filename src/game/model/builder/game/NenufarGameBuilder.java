@@ -40,13 +40,13 @@ public abstract class NenufarGameBuilder extends GameBuilder<Nenufar> {
 	}
 
 	protected void defineRedGardenerItens() {
-		getGame().addRedGardenerItem(GardenerItem.SPRAY);
-		getGame().addRedGardenerItem(GardenerItem.VENENO);
+		getGame().addRedGardenerItem(GardenerItem.PULVERIZADOR);
+		getGame().addRedGardenerItem(GardenerItem.TESOURA_PODA);
 	}
 
 	protected void defineYellowGardenerItens() {
-		getGame().addYellowGardenerItem(GardenerItem.SPRAY);
-		getGame().addYellowGardenerItem(GardenerItem.VENENO);
+		getGame().addYellowGardenerItem(GardenerItem.PULVERIZADOR);
+		getGame().addYellowGardenerItem(GardenerItem.TESOURA_PODA);
 	}
 
 	protected abstract int getBoardRows();

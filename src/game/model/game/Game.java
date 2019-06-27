@@ -7,14 +7,14 @@ import game.model.board.Board;
 import game.model.gardener.AbstractGardener;
 import game.model.gardener.GardenerItem;
 
-public class Game<E> extends GameStep {
+public class Game<E> implements GameStep {
 
 	private AbstractGardener redGardener;
 	private AbstractGardener yellowGardener;
 	private List<GardenerItem> redGardenerItens;
 	private List<GardenerItem> yellowGardenerItens;
 	private List<GameStep> steps;
-	private int roundTurnLimit;
+	private int turnLimit;
 	private Board<E> board;
 
 	public Game() {
@@ -23,8 +23,16 @@ public class Game<E> extends GameStep {
 		yellowGardenerItens = new ArrayList<>();
 	}
 
-	public void addRound(GameStep round) {
-		steps.add(round);
+	public void addStep(GameStep step) {
+		steps.add(step);
+	}
+	
+	public void removeStep(GameStep step) {
+		steps.remove(step);
+	}
+	
+	public GameStep getStep(int index) {
+		return steps.get(index);
 	}
 
 	public AbstractGardener getRedGardener() {
@@ -52,11 +60,11 @@ public class Game<E> extends GameStep {
 	}
 
 	public int getTurnLimit() {
-		return roundTurnLimit;
+		return turnLimit;
 	}
 
 	public void setTurnLimit(int limit) {
-		this.roundTurnLimit = limit;
+		this.turnLimit = limit;
 	}
 
 	public Board<E> getBoard() {

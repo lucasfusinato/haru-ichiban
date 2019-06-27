@@ -2,8 +2,8 @@ package game.model.gardener;
 
 public enum GardenerItem {
 
-	SPRAY("Spray"),
-	VENENO("Veneno");
+	PULVERIZADOR("Pulverizador"),
+	TESOURA_PODA("Tesoura de Poda");
 	
 	private String icone;
 	

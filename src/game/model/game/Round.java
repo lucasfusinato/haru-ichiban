@@ -5,7 +5,7 @@ import java.util.List;
 
 import game.model.flower.Flower;
 
-public class Round extends GameStep {
+public class Round implements GameStep {
 	
 	private List<Turn> turns;
 	private List<Flower> redFlowers;

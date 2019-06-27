@@ -1,4 +1,4 @@
-package game.model.decorator;
+package game.model.gardener.decorator;
 
 import game.model.board.Square;
 import game.model.flower.Flower;

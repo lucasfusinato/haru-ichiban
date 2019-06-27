@@ -1,4 +1,4 @@
-package game.model.decorator;
+package game.model.gardener.decorator;
 
 import java.util.List;
 
@@ -9,9 +9,9 @@ import game.model.nenufar.Nenufar;
 import game.model.strategy.square.CompareEmptyNenufarStrategy;
 import game.model.visitor.BuscarCasasProximasVisitor;
 
-public class GardenerSprayDecorator extends AbstractGardenerDecorator {
+public class GardenerPulverizadorDecorator extends AbstractGardenerDecorator {
 
-	public GardenerSprayDecorator(Gardener gardener) {
+	public GardenerPulverizadorDecorator(Gardener gardener) {
 		super(gardener);
 	}
 	
