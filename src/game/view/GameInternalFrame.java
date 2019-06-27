@@ -10,8 +10,8 @@ public class GameInternalFrame extends JInternalFrame {
 	public static final int WIDTH = 1100;
 	public static final int HEIGHT = 600;
 
-	public GameInternalFrame(GameControllerInterface gameController) {
-		this.setContentPane(new GamePanel(gameController));
+	public GameInternalFrame(GameControllerInterface gameController, GameFrame gameFrame) {
+		this.setContentPane(new GamePanel(gameController, gameFrame));
 	}
 
 }

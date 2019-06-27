@@ -10,8 +10,8 @@ import game.view.gardener.YellowGardenerPanel;
 @SuppressWarnings("serial")
 public class GamePanel extends AbstractGamePanel {
 
-	public GamePanel(GameControllerInterface gameController) {
-		super(gameController);
+	public GamePanel(GameControllerInterface gameController, GameFrame gameFrame) {
+		super(gameController, gameFrame);
 	}
 
 	@Override

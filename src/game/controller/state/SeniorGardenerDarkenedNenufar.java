@@ -1,13 +1,13 @@
 package game.controller.state;
 
 import game.controller.exception.move.InvalidDarkenedNenufarSquareException;
-import game.model.Element;
+import game.model.board.Square;
 import game.model.frog.Frog;
-import game.model.frog.RedFrog;
-import game.model.frog.YellowFrog;
 import game.model.game.GameStatus;
-import game.model.nenufar.LightedNenufar;
 import game.model.nenufar.Nenufar;
+import game.model.strategy.square.CompareFlowerNenufarStrategy;
+import game.model.strategy.square.CompareRedFrogNenufarStrategy;
+import game.model.strategy.square.CompareYellowFrogNenufarStrategy;
 
 public class SeniorGardenerDarkenedNenufar extends AbstractEndFlowState {
 
@@ -29,17 +29,18 @@ public class SeniorGardenerDarkenedNenufar extends AbstractEndFlowState {
 	public GameStatus getStatus() {
 		return GameStatus.SENIOR_GARDENER_DARKENED_NENUFAR;
 	}
-
+ 
 	private boolean canDefineDarkenedNenufarToSquare(int row, int column) {
-		Nenufar nenufar = gameController.getCurrentBoard().getElementAtSquare(row, column);
-		return nenufar != null && nenufar.getClass() == LightedNenufar.class && nenufar.getElement() == null;
+		Square<Nenufar> square = gameController.getCurrentBoard().getSquare(row, column);
+		return !(new CompareFlowerNenufarStrategy()).compare(square);
 	}
 	
 	private void defineDarkenedNenufarToSquare(int row, int column) {
+		Square<Nenufar> square = gameController.getCurrentBoard().getSquare(row, column);
 		Nenufar nenufar = gameController.getCurrentBoard().getElementAtSquare(row, column);
-		Element element = nenufar.getElement();
-		if(element != null && (element.getClass() == RedFrog.class || element.getClass() == YellowFrog.class)) {
-			gameController.setCurrentFrog((Frog) element);
+		if((new CompareRedFrogNenufarStrategy()).compare(square) || (new CompareYellowFrogNenufarStrategy()).compare(square)) {
+			gameController.setCurrentFrog((Frog) nenufar.getElement());
+			nenufar.setElement(null);
 		}
 		nenufar.activeBottomSide();
 		gameController.setElementAtSquare(nenufar, row, column);

@@ -46,4 +46,6 @@ public interface GameControllerObserver {
 
 	void blockItems(boolean b);
 
+	void updateWinner(String winner);
+
 }

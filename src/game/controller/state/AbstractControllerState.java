@@ -167,5 +167,13 @@ public abstract class AbstractControllerState {
 		}
 		return items;
 	}
+
+	public boolean isFinished() {
+		return false;
+	}
+
+	public String getWinnerGardener() {
+		return null;
+	}
 		
 }

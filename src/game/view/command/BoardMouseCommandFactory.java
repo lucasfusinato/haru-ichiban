@@ -24,6 +24,7 @@ public class BoardMouseCommandFactory {
 				return new SeniorGardenerFlowerSquareCommand(gameController, rowIndex, columnIndex);
 			case SENIOR_GARDENER_FROG_SQUARE:
 			case GARDENER_CROAK_FROG_SQUARE:
+			case SENIOR_GARDENER_DARKENED_FROG_NENUFAR:
 				return new GardenerFrogSquareCommand(gameController, rowIndex, columnIndex);
 			case JUNIOR_GARDENER_HARU_ICHIBAN:
 				return new JuniorGardenerHaruIchibanCommand(gameController, rowIndex, columnIndex);

@@ -27,7 +27,7 @@ public class GameFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setTitle("Haru ichiban");
 		JDesktopPane desktopPane = new JDesktopPane();
-		gameInternalFrame = new GameInternalFrame(this.gameController);
+		gameInternalFrame = new GameInternalFrame(this.gameController, this);
 		gameInternalFrame.setBorder(null);
 		((BasicInternalFrameUI) gameInternalFrame.getUI()).setNorthPane(null);
 		desktopPane.add(gameInternalFrame);
@@ -39,11 +39,11 @@ public class GameFrame extends JFrame {
 			e.printStackTrace();
 		}
 		addWindowListener(new WindowAdapter() {
-			 @Override
-	            public void windowClosing(WindowEvent e) {
-	                setVisible(false);
-	        		MainFrame.getInstance().setVisible(true);
-	            }
+			@Override
+            public void windowClosing(WindowEvent e) {
+                setVisible(false);
+        		MainFrame.getInstance().setVisible(true);
+            }
 		});
 	}
 	

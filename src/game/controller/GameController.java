@@ -371,7 +371,11 @@ public class GameController implements GameControllerInterface, GameControllerSt
 	@Override
 	public void setState(AbstractControllerState state) {
 		this.state = state;
-		updateTurnStatus(state.getStatus());
+		if(state.isFinished()) {
+			notifyFinishedGame(state.getWinnerGardener());
+		} else {
+			updateTurnStatus(state.getStatus());
+		}
 	}
 
 	@Override
@@ -751,6 +755,12 @@ public class GameController implements GameControllerInterface, GameControllerSt
 		if(currentTurn != null) {
 			currentTurn.setStatus(status);
 			notifyUpdatedTurnStatus();
+		}
+	}
+
+	protected void notifyFinishedGame(String winner) {
+		for(GameControllerObserver observer : observers) {
+			observer.updateWinner(winner);
 		}
 	}
 	

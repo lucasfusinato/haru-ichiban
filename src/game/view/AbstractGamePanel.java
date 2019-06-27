@@ -14,9 +14,11 @@ public abstract class AbstractGamePanel extends JPanel implements GameController
 	private AbstractGameComponentsPanel gameComponentsPanel;
 	private AbstractGardenerPanel redGardenerPanel;
 	private AbstractGardenerPanel yellowGardenerPanel;
+	private GameFrame gameFrame;
 
-	public AbstractGamePanel(GameControllerInterface gameController) {
+	public AbstractGamePanel(GameControllerInterface gameController, GameFrame gameFrame) {
 		this.gameController = gameController;
+		this.gameFrame = gameFrame;
 		this.init();
 		this.gameController.attach(this);
 	}
@@ -167,6 +169,12 @@ public abstract class AbstractGamePanel extends JPanel implements GameController
 	public void blockItems(boolean b) {
 		redGardenerPanel.blockItems(b);
 		yellowGardenerPanel.blockItems(b);
+	}
+	
+	@Override
+	public void updateWinner(String winner) {
+		JOptionPane.showMessageDialog(null, "Jogo finalizado! O vencedor é: " + winner);
+		gameFrame.dispose();
 	}
 	
 }
